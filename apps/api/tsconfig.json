@@ -5,6 +5,7 @@
     "module": "CommonJS",
     "moduleResolution": "node",
     "outDir": "./dist",
+    "typeRoots": ["../../node_modules/@types", "./node_modules/@types"],
     "paths": {
       "@interview-prep/shared": ["../../packages/shared/src/index.ts"]
     }
