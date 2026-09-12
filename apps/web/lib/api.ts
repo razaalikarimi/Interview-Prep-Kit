@@ -1,7 +1,8 @@
 // Frontend API Client
 // Typed wrapper around fetch for all API calls
 
-const API_BASE = process.env['NEXT_PUBLIC_API_URL'] ?? 'http://localhost:3001';
+const RAW_API_BASE = process.env['NEXT_PUBLIC_API_URL'] ?? 'http://localhost:3001';
+const API_BASE = RAW_API_BASE.replace(/\/+$/, '');
 
 export class ApiError extends Error {
   constructor(
