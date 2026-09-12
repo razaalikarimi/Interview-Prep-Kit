@@ -151,11 +151,9 @@ export async function safeFetch(
   }
 
   // Size limit — read with limit
-  const buffer: Buffer[] = [];
-  let totalBytes = 0;
-
-  const responseBuffer = await response.buffer();
-  totalBytes = responseBuffer.length;
+  const arrayBuffer = await response.arrayBuffer();
+  const responseBuffer = Buffer.from(arrayBuffer);
+  const totalBytes = responseBuffer.length;
 
   if (totalBytes > MAX_RESPONSE_BYTES) {
     logger.warn('Response truncated due to size limit', {
@@ -173,8 +171,6 @@ export async function safeFetch(
       sizeBytes: totalBytes,
     };
   }
-
-  void buffer; // unused (kept for clarity)
 
   return {
     url: currentUrl,

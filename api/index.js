@@ -5518,10 +5518,9 @@ async function safeFetch(rawUrl, isEvalMode = false) {
       `Unsupported content-type: ${contentType} for ${currentUrl}`
     );
   }
-  const buffer = [];
-  let totalBytes = 0;
-  const responseBuffer = await response.buffer();
-  totalBytes = responseBuffer.length;
+  const arrayBuffer = await response.arrayBuffer();
+  const responseBuffer = Buffer.from(arrayBuffer);
+  const totalBytes = responseBuffer.length;
   if (totalBytes > MAX_RESPONSE_BYTES) {
     logger.warn("Response truncated due to size limit", {
       url: currentUrl,
@@ -5537,7 +5536,6 @@ async function safeFetch(rawUrl, isEvalMode = false) {
       sizeBytes: totalBytes
     };
   }
-  void buffer;
   return {
     url: currentUrl,
     status: response.status,
@@ -7924,11 +7922,6 @@ app.use((_req, res) => {
 });
 app.use(errorHandler);
 var server_default = app;
-if (typeof module !== "undefined" && module.exports) {
-  module.exports = app;
-  module.exports["default"] = app;
-  module.exports["app"] = app;
-}
 async function start() {
   const mongoUri = process.env["MONGODB_URI"];
   if (!mongoUri) {
