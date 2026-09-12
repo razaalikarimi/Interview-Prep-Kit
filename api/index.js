@@ -7956,3 +7956,10 @@ if (require.main === module && !isServerless && process.env["NODE_ENV"] !== "tes
 0 && (module.exports = {
   app
 });
+if (typeof module !== "undefined" && module.exports) {
+  var _exp = module.exports.default || module.exports.app || module.exports;
+  module.exports = _exp;
+  module.exports.default = _exp;
+  module.exports.app = _exp;
+}
+
