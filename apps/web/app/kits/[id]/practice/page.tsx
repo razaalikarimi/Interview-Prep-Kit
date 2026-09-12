@@ -16,11 +16,11 @@ import {
 } from 'lucide-react';
 
 const CONFIDENCE_LEVELS = [
-  { level: 1, label: 'Needs Review', sub: 'Did not know', color: 'hover:border-rose-500 hover:bg-rose-500/10' },
-  { level: 2, label: 'Hard', sub: 'Struggled', color: 'hover:border-amber-500 hover:bg-amber-500/10' },
-  { level: 3, label: 'Medium', sub: 'Partially recalled', color: 'hover:border-yellow-500 hover:bg-yellow-500/10' },
-  { level: 4, label: 'Good', sub: 'Mostly solid', color: 'hover:border-blue-500 hover:bg-blue-500/10' },
-  { level: 5, label: 'Mastered', sub: 'Immediate recall', color: 'hover:border-emerald-500 hover:bg-emerald-500/10' },
+  { level: 1, label: 'Needs Review', sub: 'Did not know', color: 'hover:border-rose-300 hover:bg-rose-50' },
+  { level: 2, label: 'Hard', sub: 'Struggled', color: 'hover:border-amber-300 hover:bg-amber-50' },
+  { level: 3, label: 'Medium', sub: 'Partially recalled', color: 'hover:border-yellow-300 hover:bg-yellow-50' },
+  { level: 4, label: 'Good', sub: 'Mostly solid', color: 'hover:border-blue-300 hover:bg-blue-50' },
+  { level: 5, label: 'Mastered', sub: 'Immediate recall', color: 'hover:border-emerald-300 hover:bg-emerald-50' },
 ] as const;
 
 export default function PracticePage({ params }: { params: Promise<{ id: string }> }) {
@@ -90,8 +90,8 @@ export default function PracticePage({ params }: { params: Promise<{ id: string 
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-slate-950 flex items-center justify-center">
-        <Loader2 className="w-6 h-6 text-blue-500 animate-spin" />
+      <div className="min-h-screen bg-[#F8F9FB] flex items-center justify-center">
+        <Loader2 className="w-6 h-6 text-blue-600 animate-spin" />
       </div>
     );
   }
@@ -105,33 +105,33 @@ export default function PracticePage({ params }: { params: Promise<{ id: string 
   const reviewCount = sessionConfidence.filter((c) => c <= 2).length;
 
   return (
-    <div className="min-h-screen bg-slate-950 flex flex-col text-slate-100">
+    <div className="min-h-screen bg-[#F8F9FB] flex flex-col text-gray-900">
       <AppHeader />
 
       {/* Navigation & Telemetry Bar */}
-      <div className="border-b border-slate-800 bg-slate-900/40">
+      <div className="border-b border-gray-200 bg-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
           <Link
             href={`/kits/${id}`}
-            className="inline-flex items-center gap-1.5 text-xs text-slate-400 hover:text-white transition-colors"
+            className="inline-flex items-center gap-1.5 text-xs text-gray-600 hover:text-gray-900 font-medium transition-colors"
           >
             <ArrowLeft className="w-3.5 h-3.5" />
             <span>Return to Kit Workspace</span>
           </Link>
 
-          <div className="flex items-center gap-4 text-xs font-mono text-slate-400">
+          <div className="flex items-center gap-4 text-xs font-mono text-gray-500">
             <span>
               Card {Math.min(currentIndex + 1, flashcards.length)} / {flashcards.length}
             </span>
-            <span className="text-slate-600">|</span>
+            <span className="text-gray-300">|</span>
             <span>{sessionConfidence.length} Completed</span>
           </div>
         </div>
 
         {/* Progress Strip */}
-        <div className="h-1 bg-slate-900 overflow-hidden">
+        <div className="h-1 bg-gray-100 overflow-hidden">
           <div
-            className="h-full bg-blue-500 transition-all duration-200"
+            className="h-full bg-blue-600 transition-all duration-200"
             style={{ width: `${progressPercent}%` }}
           />
         </div>
@@ -142,28 +142,28 @@ export default function PracticePage({ params }: { params: Promise<{ id: string 
         {isFinished ? (
           /* Session Completed Summary */
           <div className="enterprise-card p-8 text-center animate-fade-in">
-            <div className="w-12 h-12 rounded-full bg-emerald-500/10 text-emerald-400 flex items-center justify-center mx-auto mb-4 border border-emerald-500/20">
+            <div className="w-12 h-12 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center mx-auto mb-4 border border-emerald-200">
               <CheckCircle2 className="w-6 h-6" />
             </div>
 
-            <h2 className="text-xl font-semibold text-white mb-1">Practice Session Completed</h2>
-            <p className="text-xs text-slate-400 max-w-sm mx-auto mb-6">
+            <h2 className="text-xl font-bold text-gray-900 mb-1">Practice Session Completed</h2>
+            <p className="text-xs text-gray-500 max-w-sm mx-auto mb-6">
               You reviewed {sessionConfidence.length} flashcards in this session. Spaced repetition telemetry has been updated.
             </p>
 
             {/* Session Stats */}
             <div className="grid grid-cols-3 gap-3 max-w-md mx-auto mb-8 text-center">
-              <div className="p-3 rounded bg-slate-900 border border-slate-800">
-                <div className="text-[11px] font-mono text-slate-500 uppercase">Avg Score</div>
-                <div className="text-xl font-semibold text-white mt-0.5">{avgConfidence} / 5</div>
+              <div className="p-3 rounded bg-gray-50 border border-gray-200">
+                <div className="text-[11px] font-mono text-gray-500 uppercase font-semibold">Avg Score</div>
+                <div className="text-xl font-bold text-gray-900 mt-0.5">{avgConfidence} / 5</div>
               </div>
-              <div className="p-3 rounded bg-slate-900 border border-slate-800">
-                <div className="text-[11px] font-mono text-slate-500 uppercase">Mastered (4-5)</div>
-                <div className="text-xl font-semibold text-emerald-400 mt-0.5">{masteredCount}</div>
+              <div className="p-3 rounded bg-gray-50 border border-gray-200">
+                <div className="text-[11px] font-mono text-gray-500 uppercase font-semibold">Mastered (4-5)</div>
+                <div className="text-xl font-bold text-emerald-600 mt-0.5">{masteredCount}</div>
               </div>
-              <div className="p-3 rounded bg-slate-900 border border-slate-800">
-                <div className="text-[11px] font-mono text-slate-500 uppercase">Needs Review (1-2)</div>
-                <div className="text-xl font-semibold text-rose-400 mt-0.5">{reviewCount}</div>
+              <div className="p-3 rounded bg-gray-50 border border-gray-200">
+                <div className="text-[11px] font-mono text-gray-500 uppercase font-semibold">Needs Review (1-2)</div>
+                <div className="text-xl font-bold text-rose-600 mt-0.5">{reviewCount}</div>
               </div>
             </div>
 
@@ -174,7 +174,7 @@ export default function PracticePage({ params }: { params: Promise<{ id: string 
                   setRevealed(false);
                   setSessionConfidence([]);
                 }}
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white text-xs font-medium rounded transition-colors"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-xs font-medium rounded transition-colors shadow-xs"
               >
                 <RotateCcw className="w-3.5 h-3.5" />
                 Practice Deck Again
@@ -182,26 +182,26 @@ export default function PracticePage({ params }: { params: Promise<{ id: string 
 
               <Link
                 href={`/kits/${id}/radar`}
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-4 py-2 bg-slate-900 hover:bg-slate-800 text-slate-200 text-xs font-medium rounded border border-slate-800 transition-colors"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-4 py-2 bg-white hover:bg-gray-50 text-gray-700 text-xs font-medium rounded border border-gray-300 shadow-xs transition-colors"
               >
-                <Compass className="w-3.5 h-3.5" />
+                <Compass className="w-3.5 h-3.5 text-gray-500" />
                 Inspect Weakness Radar
               </Link>
 
               <Link
                 href={`/kits/${id}`}
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-4 py-2 text-xs font-medium text-slate-400 hover:text-white transition-colors"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-4 py-2 text-xs font-medium text-gray-500 hover:text-gray-900 transition-colors"
               >
                 Return to Kit
               </Link>
             </div>
           </div>
         ) : flashcards.length === 0 ? (
-          <div className="enterprise-card p-10 text-center text-xs text-slate-400">
+          <div className="enterprise-card p-10 text-center text-xs text-gray-500">
             <p className="mb-4">No flashcards available to practice.</p>
             <Link
               href={`/kits/${id}`}
-              className="inline-flex items-center gap-1.5 px-4 py-2 bg-slate-900 text-white rounded text-xs"
+              className="inline-flex items-center gap-1.5 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded text-xs font-medium shadow-xs"
             >
               <ArrowLeft className="w-3.5 h-3.5" />
               Back to Kit
@@ -210,15 +210,15 @@ export default function PracticePage({ params }: { params: Promise<{ id: string 
         ) : (
           /* Active Card View */
           <div className="space-y-6">
-            <div className="enterprise-card p-8 min-h-[320px] flex flex-col justify-between border-slate-800 shadow-xl">
+            <div className="enterprise-card p-8 min-h-[320px] flex flex-col justify-between border-gray-200 shadow-md">
               <div>
-                <div className="flex items-center justify-between pb-3 mb-4 border-b border-slate-800/80">
-                  <span className="text-[10px] font-mono uppercase tracking-wider text-slate-500 font-semibold">
+                <div className="flex items-center justify-between pb-3 mb-4 border-b border-gray-100">
+                  <span className="text-[10px] font-mono uppercase tracking-wider text-gray-500 font-semibold">
                     Card {currentIndex + 1} of {flashcards.length} · {card.id}
                   </span>
 
                   {card.requirement_ids && card.requirement_ids.length > 0 && (
-                    <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-slate-900 border border-slate-800 text-slate-400">
+                    <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-gray-100 border border-gray-200 text-gray-600">
                       Req: {card.requirement_ids.join(', ')}
                     </span>
                   )}
@@ -226,21 +226,21 @@ export default function PracticePage({ params }: { params: Promise<{ id: string 
 
                 {/* Prompt */}
                 <div className="my-6">
-                  <span className="text-[11px] font-mono uppercase tracking-wider text-slate-500 block mb-2">
+                  <span className="text-[11px] font-mono uppercase tracking-wider text-gray-500 block mb-2 font-semibold">
                     Question
                   </span>
-                  <h2 className="text-base sm:text-lg font-medium text-white leading-relaxed">
+                  <h2 className="text-base sm:text-lg font-semibold text-gray-900 leading-relaxed">
                     {card.front}
                   </h2>
                 </div>
 
                 {/* Revealed Answer */}
                 {revealed ? (
-                  <div className="pt-6 border-t border-slate-800 animate-fade-in">
-                    <span className="text-[11px] font-mono uppercase tracking-wider text-emerald-400 font-medium block mb-2">
+                  <div className="pt-6 border-t border-gray-100 animate-fade-in">
+                    <span className="text-[11px] font-mono uppercase tracking-wider text-emerald-700 font-semibold block mb-2">
                       Answer / Key Concept
                     </span>
-                    <p className="text-xs sm:text-sm text-slate-200 leading-relaxed font-sans">
+                    <p className="text-xs sm:text-sm text-gray-700 leading-relaxed font-sans">
                       {card.back}
                     </p>
                   </div>
@@ -249,15 +249,15 @@ export default function PracticePage({ params }: { params: Promise<{ id: string 
 
               {/* Action Button: Reveal Answer */}
               {!revealed && (
-                <div className="pt-6 border-t border-slate-800/80 flex items-center justify-between">
-                  <span className="text-[11px] text-slate-500 hidden sm:inline">
-                    Press <kbd className="font-mono bg-slate-900 border border-slate-800 px-1 py-0.5 rounded text-slate-400">Space</kbd> to reveal
+                <div className="pt-6 border-t border-gray-100 flex items-center justify-between">
+                  <span className="text-[11px] text-gray-500 hidden sm:inline">
+                    Press <kbd className="font-mono bg-gray-100 border border-gray-300 px-1 py-0.5 rounded text-gray-600">Space</kbd> to reveal
                   </span>
 
                   <button
                     type="button"
                     onClick={() => setRevealed(true)}
-                    className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2 bg-blue-600 hover:bg-blue-500 text-white text-xs font-medium rounded transition-colors shadow-sm ml-auto"
+                    className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white text-xs font-medium rounded transition-colors shadow-sm ml-auto"
                   >
                     <Eye className="w-3.5 h-3.5" />
                     <span>Reveal Answer</span>
@@ -270,11 +270,11 @@ export default function PracticePage({ params }: { params: Promise<{ id: string 
             {revealed && (
               <div className="enterprise-card p-5 animate-fade-in">
                 <div className="flex items-center justify-between mb-3">
-                  <span className="text-xs font-medium text-slate-300">
+                  <span className="text-xs font-semibold text-gray-700">
                     How confident were you with this concept?
                   </span>
-                  <span className="text-[11px] text-slate-500 hidden sm:inline">
-                    Press keys <kbd className="font-mono bg-slate-900 border border-slate-800 px-1 py-0.5 rounded text-slate-400">1</kbd> - <kbd className="font-mono bg-slate-900 border border-slate-800 px-1 py-0.5 rounded text-slate-400">5</kbd>
+                  <span className="text-[11px] text-gray-500 hidden sm:inline">
+                    Press keys <kbd className="font-mono bg-gray-100 border border-gray-300 px-1 py-0.5 rounded text-gray-600">1</kbd> - <kbd className="font-mono bg-gray-100 border border-gray-300 px-1 py-0.5 rounded text-gray-600">5</kbd>
                   </span>
                 </div>
 
@@ -283,15 +283,15 @@ export default function PracticePage({ params }: { params: Promise<{ id: string 
                     <button
                       key={c.level}
                       onClick={() => handleConfidence(c.level as 1 | 2 | 3 | 4 | 5)}
-                      className={`p-2.5 rounded bg-slate-900 border border-slate-800 text-center transition-all ${c.color} group`}
+                      className={`p-2.5 rounded bg-white border border-gray-200 text-center transition-all ${c.color} shadow-xs group`}
                     >
-                      <div className="text-xs font-mono font-semibold text-slate-200 group-hover:text-white">
+                      <div className="text-xs font-mono font-bold text-gray-900">
                         {c.level}
                       </div>
-                      <div className="text-[10px] font-medium text-slate-300 truncate mt-0.5">
+                      <div className="text-[10px] font-medium text-gray-700 truncate mt-0.5">
                         {c.label}
                       </div>
-                      <div className="text-[9px] text-slate-500 hidden md:block truncate mt-0.5">
+                      <div className="text-[9px] text-gray-500 hidden md:block truncate mt-0.5">
                         {c.sub}
                       </div>
                     </button>

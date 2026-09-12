@@ -1,23 +1,24 @@
 @import "tailwindcss";
 
 :root {
-  --bg-app: #090d16;
-  --bg-surface: #0f172a;
-  --bg-surface-subtle: #1e293b;
-  --bg-surface-elevated: #162032;
-  --border-subtle: #1e293b;
-  --border-muted: #334155;
-  --border-strong: #475569;
-  --text-primary: #f8fafc;
-  --text-secondary: #94a3b8;
-  --text-muted: #64748b;
-  --accent-primary: #3b82f6;
-  --accent-hover: #2563eb;
-  --accent-subtle: rgba(59, 130, 246, 0.1);
-  --success: #10b981;
-  --warning: #f59e0b;
-  --error: #ef4444;
-  --info: #0284c7;
+  /* Light Theme Core Tokens (Google Workspace / Microsoft 365 / Linear Light inspired) */
+  --bg-app: #F8F9FB;
+  --bg-surface: #FFFFFF;
+  --bg-surface-subtle: #F1F3F7;
+  --bg-surface-elevated: #FFFFFF;
+  --border-subtle: #E5E7EB;
+  --border-muted: #D1D5DB;
+  --border-strong: #9CA3AF;
+  --text-primary: #111827;
+  --text-secondary: #4B5563;
+  --text-muted: #6B7280;
+  --accent-primary: #2563EB;
+  --accent-hover: #1D4ED8;
+  --accent-subtle: rgba(37, 99, 235, 0.08);
+  --success: #059669;
+  --warning: #D97706;
+  --error: #DC2626;
+  --info: #0284C7;
   --radius: 0.5rem;
 }
 
@@ -26,35 +27,35 @@ html {
 }
 
 body {
-  background-color: #090d16;
-  color: #f8fafc;
+  background-color: var(--bg-app);
+  color: var(--text-primary);
   font-feature-settings: "cv02", "cv03", "cv04", "cv11";
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
 }
 
-/* Custom scrollbar */
+/* Custom light scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #090d16;
+  background: #F1F3F7;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #233044;
+  background: #D1D5DB;
   border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #334155;
+  background: #9CA3AF;
 }
 
 /* Focus visibility for accessibility */
 :focus-visible {
-  outline: 2px solid #3b82f6;
+  outline: 2px solid var(--accent-primary);
   outline-offset: 2px;
 }
 
@@ -73,65 +74,73 @@ body {
   animation: fadeIn 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-/* Enterprise Surface & Cards */
+/* Enterprise Surface & Cards (Crisp White with subtle border and micro shadow) */
 .enterprise-card {
-  background-color: #0f172a;
-  border: 1px solid #1e293b;
+  background-color: #FFFFFF;
+  border: 1px solid #E5E7EB;
   border-radius: 0.5rem;
-  transition: border-color 0.15s ease, background-color 0.15s ease;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.03);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
 }
 
 .enterprise-card:hover {
-  border-color: #334155;
+  border-color: #D1D5DB;
+  box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.05);
 }
 
 .enterprise-card-interactive {
-  background-color: #0f172a;
-  border: 1px solid #1e293b;
+  background-color: #FFFFFF;
+  border: 1px solid #E5E7EB;
   border-radius: 0.5rem;
   cursor: pointer;
-  transition: border-color 0.15s ease, background-color 0.15s ease;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.03);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
 }
 
 .enterprise-card-interactive:hover {
-  border-color: #3b82f6;
-  background-color: #111d33;
+  border-color: #93C5FD;
+  background-color: #F8FAFC;
+  box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.05);
 }
 
-/* Status Badges */
+/* Light Status Badges */
 .badge-queued {
-  background: rgba(100, 116, 139, 0.15);
-  color: #94a3b8;
-  border: 1px solid rgba(100, 116, 139, 0.25);
+  background: #F3F4F6;
+  color: #4B5563;
+  border: 1px solid #E5E7EB;
 }
 
 .badge-running {
-  background: rgba(59, 130, 246, 0.15);
-  color: #60a5fa;
-  border: 1px solid rgba(59, 130, 246, 0.3);
+  background: #EFF6FF;
+  color: #2563EB;
+  border: 1px solid #BFDBFE;
 }
 
 .badge-completed {
-  background: rgba(16, 185, 129, 0.15);
-  color: #34d399;
-  border: 1px solid rgba(16, 185, 129, 0.3);
+  background: #ECFDF5;
+  color: #059669;
+  border: 1px solid #A7F3D0;
 }
 
 .badge-partial {
-  background: rgba(245, 158, 11, 0.15);
-  color: #fbbf24;
-  border: 1px solid rgba(245, 158, 11, 0.3);
+  background: #FFFBEB;
+  color: #D97706;
+  border: 1px solid #FDE68A;
 }
 
 .badge-failed {
-  background: rgba(239, 68, 68, 0.15);
-  color: #f87171;
-  border: 1px solid rgba(239, 68, 68, 0.3);
+  background: #FEF2F2;
+  color: #DC2626;
+  border: 1px solid #FECACA;
 }
 
-/* Progress bar */
-.progress-bar {
-  background-color: #3b82f6;
-  border-radius: 9999px;
-  transition: width 0.3s ease-in-out;
+/* Print optimizations */
+@media print {
+  body {
+    background: white;
+    color: black;
+  }
+  .no-print {
+    display: none !important;
+  }
 }

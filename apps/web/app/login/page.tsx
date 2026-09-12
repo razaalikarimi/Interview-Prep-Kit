@@ -32,7 +32,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col justify-center items-center bg-slate-950 px-4 text-slate-100">
+    <div className="min-h-screen flex flex-col justify-center items-center bg-[#F8F9FB] px-4 text-gray-900">
       <div className="w-full max-w-sm">
         {/* Brand */}
         <div className="text-center mb-8">
@@ -40,35 +40,35 @@ export default function LoginPage() {
             <div className="w-8 h-8 rounded bg-blue-600 flex items-center justify-center text-white shadow-sm">
               <Sparkles className="w-4 h-4 text-white" />
             </div>
-            <span className="font-semibold text-base text-white tracking-tight">
+            <span className="font-semibold text-base text-gray-900 tracking-tight">
               Interview Prep Kit
             </span>
           </Link>
-          <h1 className="text-lg font-semibold text-white">Sign in to your account</h1>
-          <p className="text-xs text-slate-400 mt-1">
+          <h1 className="text-lg font-bold text-gray-900">Sign in to your account</h1>
+          <p className="text-xs text-gray-500 mt-1">
             Access your personalized interview preparation workspace.
           </p>
         </div>
 
         {/* Card */}
-        <div className="enterprise-card p-6 shadow-xl">
+        <div className="enterprise-card p-6 shadow-md">
           {error && (
             <div
-              className="mb-4 p-3 rounded bg-red-500/10 border border-red-500/20 text-xs text-red-300 flex items-start gap-2"
+              className="mb-4 p-3 rounded bg-red-50 border border-red-200 text-xs text-red-700 flex items-start gap-2"
               role="alert"
             >
-              <AlertCircle className="w-4 h-4 text-red-400 flex-shrink-0 mt-0.5" />
+              <AlertCircle className="w-4 h-4 text-red-600 flex-shrink-0 mt-0.5" />
               <span>{error}</span>
             </div>
           )}
 
           <form onSubmit={handleSubmit} className="space-y-4 text-xs">
             <div>
-              <label htmlFor="email" className="block font-medium text-slate-300 mb-1">
+              <label htmlFor="email" className="block font-medium text-gray-700 mb-1">
                 Corporate Email Address
               </label>
               <div className="relative">
-                <Mail className="w-3.5 h-3.5 text-slate-500 absolute left-3 top-1/2 -translate-y-1/2" />
+                <Mail className="w-3.5 h-3.5 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" />
                 <input
                   id="email"
                   type="email"
@@ -76,19 +76,19 @@ export default function LoginPage() {
                   placeholder="engineer@company.com"
                   value={form.email}
                   onChange={(e) => setForm((f) => ({ ...f, email: e.target.value }))}
-                  className="w-full pl-9 pr-3 py-2 bg-slate-900 border border-slate-800 rounded text-xs text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 transition-colors"
+                  className="w-full pl-9 pr-3 py-2 bg-white border border-gray-300 rounded text-xs text-gray-900 placeholder-gray-400 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors"
                 />
               </div>
             </div>
 
             <div>
               <div className="flex items-center justify-between mb-1">
-                <label htmlFor="password" className="block font-medium text-slate-300">
+                <label htmlFor="password" className="block font-medium text-gray-700">
                   Password
                 </label>
               </div>
               <div className="relative">
-                <Lock className="w-3.5 h-3.5 text-slate-500 absolute left-3 top-1/2 -translate-y-1/2" />
+                <Lock className="w-3.5 h-3.5 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" />
                 <input
                   id="password"
                   type="password"
@@ -96,7 +96,7 @@ export default function LoginPage() {
                   placeholder="••••••••••••"
                   value={form.password}
                   onChange={(e) => setForm((f) => ({ ...f, password: e.target.value }))}
-                  className="w-full pl-9 pr-3 py-2 bg-slate-900 border border-slate-800 rounded text-xs text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 transition-colors"
+                  className="w-full pl-9 pr-3 py-2 bg-white border border-gray-300 rounded text-xs text-gray-900 placeholder-gray-400 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors"
                 />
               </div>
             </div>
@@ -104,12 +104,12 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full mt-2 inline-flex items-center justify-center gap-2 py-2 px-4 bg-blue-600 hover:bg-blue-500 disabled:opacity-50 text-white font-medium rounded text-xs transition-colors shadow-sm"
+              className="w-full inline-flex items-center justify-center gap-2 py-2.5 px-4 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded transition-colors shadow-xs disabled:opacity-50 mt-2"
             >
               {loading ? (
                 <>
                   <Loader2 className="w-3.5 h-3.5 animate-spin" />
-                  <span>Authenticating...</span>
+                  <span>Signing in...</span>
                 </>
               ) : (
                 <>
@@ -120,22 +120,22 @@ export default function LoginPage() {
             </button>
           </form>
 
-          {/* Evaluator Demo Quick-Fill */}
-          <div className="mt-5 pt-4 border-t border-slate-800 text-center">
+          {/* Quick Fill Credentials for Reviewer */}
+          <div className="mt-4 pt-4 border-t border-gray-100">
             <button
               type="button"
               onClick={handleDemoFill}
-              className="text-[11px] text-slate-500 hover:text-slate-300 transition-colors underline"
+              className="w-full py-1.5 px-3 bg-gray-50 hover:bg-gray-100 border border-gray-200 rounded text-[11px] font-mono text-gray-700 transition-colors"
             >
-              Fill Evaluator Demo Credentials
+              Autofill Evaluation Credentials
             </button>
           </div>
         </div>
 
         {/* Footer Link */}
-        <p className="text-center text-xs text-slate-400 mt-6">
-          Don&apos;t have an account?{' '}
-          <Link href="/register" className="text-blue-400 hover:underline font-medium">
+        <p className="text-center text-xs text-gray-500 mt-6">
+          Don&apos;t have an enterprise account?{' '}
+          <Link href="/register" className="text-blue-600 hover:underline font-medium">
             Register new account
           </Link>
         </p>

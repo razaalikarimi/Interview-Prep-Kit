@@ -22,7 +22,7 @@ export function AppHeader() {
   ];
 
   return (
-    <header className="border-b border-slate-800 bg-slate-950 sticky top-0 z-40">
+    <header className="border-b border-gray-200 bg-white sticky top-0 z-40">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-14 flex items-center justify-between">
         {/* Left: Brand + Nav */}
         <div className="flex items-center gap-8">
@@ -31,10 +31,10 @@ export function AppHeader() {
               <Sparkles className="w-4 h-4 text-white" />
             </div>
             <div className="flex items-center gap-2">
-              <span className="font-semibold text-sm text-white tracking-tight">
+              <span className="font-semibold text-sm text-gray-900 tracking-tight">
                 Interview Prep Kit
               </span>
-              <span className="text-[10px] uppercase font-mono px-1.5 py-0.5 rounded bg-slate-800 text-slate-400 border border-slate-700">
+              <span className="text-[10px] uppercase font-mono px-1.5 py-0.5 rounded bg-gray-100 text-gray-600 border border-gray-200">
                 Enterprise
               </span>
             </div>
@@ -52,8 +52,8 @@ export function AppHeader() {
                     href={link.href}
                     className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded transition-colors ${
                       isActive
-                        ? 'bg-slate-800 text-white'
-                        : 'text-slate-400 hover:text-slate-200 hover:bg-slate-900'
+                        ? 'bg-blue-50 text-blue-700 font-semibold'
+                        : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
                     }`}
                   >
                     <Icon className="w-3.5 h-3.5" />
@@ -68,32 +68,36 @@ export function AppHeader() {
         {/* Right: User actions */}
         <div className="flex items-center gap-3">
           {user ? (
-            <div className="flex items-center gap-3">
-              <div className="hidden sm:flex items-center gap-2 text-xs">
+            <>
+              {/* User indicator */}
+              <div className="hidden sm:flex items-center gap-2 px-2.5 py-1 rounded bg-gray-50 border border-gray-200 text-xs">
                 <span className="w-2 h-2 rounded-full bg-emerald-500" />
-                <span className="text-slate-300 font-medium">{user.name}</span>
-                <span className="text-slate-500 font-mono text-[11px]">({user.email})</span>
+                <span className="text-gray-600 font-mono text-[11px] truncate max-w-[180px]">
+                  {user.email}
+                </span>
               </div>
+
+              {/* Sign out */}
               <button
                 onClick={handleLogout}
-                aria-label="Sign out"
-                className="inline-flex items-center gap-1.5 px-2.5 py-1 text-xs text-slate-400 hover:text-white hover:bg-slate-800 rounded border border-transparent hover:border-slate-700 transition-colors"
+                className="inline-flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-medium text-gray-600 hover:text-red-600 hover:bg-red-50 rounded border border-gray-200 transition-colors"
+                title="Sign out of enterprise account"
               >
                 <LogOut className="w-3.5 h-3.5" />
                 <span className="hidden sm:inline">Sign out</span>
               </button>
-            </div>
+            </>
           ) : (
             <div className="flex items-center gap-2">
               <Link
                 href="/login"
-                className="px-3 py-1 text-xs text-slate-300 hover:text-white rounded transition-colors"
+                className="px-3 py-1.5 text-xs font-medium text-gray-700 hover:text-gray-900 transition-colors"
               >
-                Sign In
+                Sign in
               </Link>
               <Link
                 href="/register"
-                className="px-3 py-1 text-xs font-medium bg-blue-600 hover:bg-blue-500 text-white rounded transition-colors"
+                className="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-medium rounded transition-colors shadow-sm"
               >
                 Get Started
               </Link>

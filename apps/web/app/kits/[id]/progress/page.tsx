@@ -92,7 +92,7 @@ export default function KitProgressPage({ params }: { params: Promise<{ id: stri
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 flex flex-col text-slate-100">
+    <div className="min-h-screen bg-[#F8F9FB] flex flex-col text-gray-900">
       <AppHeader />
 
       <main className="flex-1 max-w-3xl w-full mx-auto px-4 sm:px-6 py-12">
@@ -100,38 +100,38 @@ export default function KitProgressPage({ params }: { params: Promise<{ id: stri
         <div className="enterprise-card p-6 mb-6">
           <div className="flex items-start justify-between gap-4 mb-4">
             <div>
-              <span className="text-[11px] font-mono uppercase tracking-wider text-slate-500 font-medium">
+              <span className="text-[11px] font-mono uppercase tracking-wider text-gray-500 font-semibold">
                 Pipeline Execution
               </span>
-              <h1 className="text-lg font-semibold text-white mt-0.5">
+              <h1 className="text-lg font-bold text-gray-900 mt-0.5">
                 {status === 'completed' || status === 'partial'
                   ? 'Kit Ready — Redirecting to Workspace...'
                   : status === 'failed'
                   ? 'Pipeline Execution Terminated'
                   : 'Preparing Your Interview Preparation Kit'}
               </h1>
-              <p className="text-xs text-slate-400 mt-1">
+              <p className="text-xs text-gray-500 mt-1">
                 Executing multi-stage deterministic generation pipeline across crawler, LLM synthesizer, and schedule allocator.
               </p>
             </div>
 
-            <div className="flex items-center gap-1.5 px-2.5 py-1 rounded bg-slate-900 border border-slate-800 text-xs font-mono text-slate-300">
-              <Clock className="w-3.5 h-3.5 text-slate-400" />
+            <div className="flex items-center gap-1.5 px-2.5 py-1 rounded bg-gray-50 border border-gray-200 text-xs font-mono text-gray-700">
+              <Clock className="w-3.5 h-3.5 text-gray-500" />
               <span>{formatElapsed(elapsedSeconds)}</span>
             </div>
           </div>
 
           {/* Progress Bar */}
           <div className="space-y-1.5">
-            <div className="flex justify-between text-xs font-mono text-slate-400">
-              <span className="capitalize text-slate-300">
+            <div className="flex justify-between text-xs font-mono text-gray-500">
+              <span className="capitalize text-gray-700 font-medium">
                 {currentStage ? currentStage.replace(/_/g, ' ') : 'Initializing...'}
               </span>
               <span>{percent}%</span>
             </div>
-            <div className="h-1.5 bg-slate-900 rounded-full overflow-hidden border border-slate-800">
+            <div className="h-1.5 bg-gray-100 rounded-full overflow-hidden border border-gray-200">
               <div
-                className="h-full bg-blue-500 rounded-full transition-all duration-300"
+                className="h-full bg-blue-600 rounded-full transition-all duration-300"
                 style={{ width: `${percent}%` }}
               />
             </div>
@@ -140,22 +140,22 @@ export default function KitProgressPage({ params }: { params: Promise<{ id: stri
 
         {/* Failure State */}
         {status === 'failed' && (
-          <div className="enterprise-card p-5 border-red-500/30 bg-red-500/5 mb-6 text-xs text-red-300">
+          <div className="enterprise-card p-5 border-red-200 bg-red-50 mb-6 text-xs text-red-700">
             <div className="flex items-start gap-2.5">
-              <AlertCircle className="w-4 h-4 text-red-400 flex-shrink-0 mt-0.5" />
+              <AlertCircle className="w-4 h-4 text-red-600 flex-shrink-0 mt-0.5" />
               <div>
-                <h2 className="font-semibold text-red-200 text-sm">Pipeline Execution Error</h2>
+                <h2 className="font-semibold text-red-900 text-sm">Pipeline Execution Error</h2>
                 <p className="mt-1 leading-relaxed">{error}</p>
                 <div className="mt-4 flex items-center gap-3">
                   <Link
                     href="/kits/new"
-                    className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-red-600/20 hover:bg-red-600/30 text-red-200 font-medium rounded border border-red-500/30 transition-colors"
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-red-600 hover:bg-red-700 text-white font-medium rounded transition-colors"
                   >
                     Reconfigure Parameters
                   </Link>
                   <Link
                     href="/dashboard"
-                    className="text-xs text-slate-400 hover:text-white transition-colors"
+                    className="text-xs text-gray-600 hover:text-gray-900 transition-colors font-medium"
                   >
                     Back to Dashboard
                   </Link>
@@ -167,13 +167,13 @@ export default function KitProgressPage({ params }: { params: Promise<{ id: stri
 
         {/* Warnings Stream */}
         {warnings.length > 0 && (
-          <div className="enterprise-card p-4 border-amber-500/20 bg-amber-500/5 mb-6 text-xs text-amber-300 space-y-1">
-            <div className="flex items-center gap-1.5 font-medium text-amber-200 mb-1">
-              <AlertTriangle className="w-3.5 h-3.5 text-amber-400" />
+          <div className="enterprise-card p-4 border-amber-200 bg-amber-50 mb-6 text-xs text-amber-800 space-y-1">
+            <div className="flex items-center gap-1.5 font-medium text-amber-900 mb-1">
+              <AlertTriangle className="w-3.5 h-3.5 text-amber-600" />
               <span>Pipeline Notice</span>
             </div>
             {warnings.map((w, i) => (
-              <p key={i} className="text-slate-300">
+              <p key={i} className="text-amber-800">
                 • {w}
               </p>
             ))}
@@ -182,7 +182,7 @@ export default function KitProgressPage({ params }: { params: Promise<{ id: stri
 
         {/* Process Checklist */}
         <div className="enterprise-card p-6">
-          <h2 className="text-xs font-mono font-medium text-slate-500 uppercase tracking-wider mb-4 pb-2 border-b border-slate-800">
+          <h2 className="text-xs font-mono font-semibold text-gray-500 uppercase tracking-wider mb-4 pb-2 border-b border-gray-100">
             Stage Verification Log
           </h2>
 
@@ -196,27 +196,27 @@ export default function KitProgressPage({ params }: { params: Promise<{ id: stri
                   key={stage.key}
                   className={`flex items-center gap-3 text-xs transition-colors ${
                     isCompleted
-                      ? 'text-slate-200'
+                      ? 'text-gray-900'
                       : isCurrent
-                      ? 'text-blue-400 font-medium'
-                      : 'text-slate-600'
+                      ? 'text-blue-700 font-semibold'
+                      : 'text-gray-400'
                   }`}
                 >
                   <div className="flex-shrink-0">
                     {isCompleted ? (
-                      <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+                      <CheckCircle2 className="w-4 h-4 text-emerald-600" />
                     ) : isCurrent ? (
-                      <Loader2 className="w-4 h-4 text-blue-400 animate-spin" />
+                      <Loader2 className="w-4 h-4 text-blue-600 animate-spin" />
                     ) : (
-                      <Circle className="w-4 h-4 text-slate-700" />
+                      <Circle className="w-4 h-4 text-gray-300" />
                     )}
                   </div>
                   <span className="flex-1">{stage.label}</span>
                   {isCompleted && (
-                    <span className="text-[11px] font-mono text-slate-500">Verified</span>
+                    <span className="text-[11px] font-mono text-emerald-700 font-medium">Verified</span>
                   )}
                   {isCurrent && (
-                    <span className="text-[11px] font-mono text-blue-400">Processing</span>
+                    <span className="text-[11px] font-mono text-blue-700 font-medium">Processing</span>
                   )}
                 </div>
               );

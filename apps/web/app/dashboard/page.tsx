@@ -72,8 +72,8 @@ export default function DashboardPage() {
 
   if (authLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-slate-950">
-        <Loader2 className="w-6 h-6 text-blue-500 animate-spin" />
+      <div className="min-h-screen flex items-center justify-center bg-[#F8F9FB]">
+        <Loader2 className="w-6 h-6 text-blue-600 animate-spin" />
       </div>
     );
   }
@@ -96,29 +96,29 @@ export default function DashboardPage() {
   });
 
   return (
-    <div className="min-h-screen bg-slate-950 flex flex-col text-slate-100">
+    <div className="min-h-screen bg-[#F8F9FB] flex flex-col text-gray-900">
       <AppHeader />
 
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Workspace Title & Primary CTA */}
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-6 border-b border-slate-800/80">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-6 border-b border-gray-200">
           <div>
-            <div className="flex items-center gap-2 text-xs text-slate-400 mb-1">
+            <div className="flex items-center gap-2 text-xs text-gray-500 mb-1">
               <span>Workspace</span>
               <span>/</span>
-              <span className="text-slate-200">Interview Kits</span>
+              <span className="text-gray-900 font-medium">Interview Kits</span>
             </div>
-            <h1 className="text-xl sm:text-2xl font-semibold text-white tracking-tight">
+            <h1 className="text-xl sm:text-2xl font-bold text-gray-900 tracking-tight">
               Interview Preparation Kits
             </h1>
-            <p className="text-xs sm:text-sm text-slate-400 mt-0.5">
+            <p className="text-xs sm:text-sm text-gray-500 mt-0.5">
               Manage your company-specific interview preparation kits, questions, and schedules.
             </p>
           </div>
 
           <Link
             href="/kits/new"
-            className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white text-xs sm:text-sm font-medium rounded transition-colors shadow-sm whitespace-nowrap"
+            className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-xs sm:text-sm font-medium rounded transition-colors shadow-sm whitespace-nowrap"
           >
             <Plus className="w-4 h-4" />
             Create Interview Kit
@@ -128,80 +128,81 @@ export default function DashboardPage() {
         {/* Executive Metrics Strip */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 my-6">
           <div className="enterprise-card p-4">
-            <div className="text-[11px] uppercase tracking-wider text-slate-500 font-medium mb-1">
+            <div className="text-[11px] uppercase tracking-wider text-gray-500 font-semibold mb-1">
               Total Kits
             </div>
-            <div className="text-2xl font-semibold text-white">{kits.length}</div>
-            <div className="text-[11px] text-slate-400 mt-1">Configured targets</div>
+            <div className="text-2xl font-bold text-gray-900">{kits.length}</div>
+            <div className="text-[11px] text-gray-500 mt-1">Configured targets</div>
           </div>
 
           <div className="enterprise-card p-4">
-            <div className="text-[11px] uppercase tracking-wider text-slate-500 font-medium mb-1">
+            <div className="text-[11px] uppercase tracking-wider text-gray-500 font-semibold mb-1">
               Ready to Practice
             </div>
-            <div className="text-2xl font-semibold text-emerald-400">{readyKits.length}</div>
-            <div className="text-[11px] text-slate-400 mt-1">Schedules generated</div>
+            <div className="text-2xl font-bold text-emerald-600">{readyKits.length}</div>
+            <div className="text-[11px] text-gray-500 mt-1">Schedules generated</div>
           </div>
 
           <div className="enterprise-card p-4">
-            <div className="text-[11px] uppercase tracking-wider text-slate-500 font-medium mb-1">
+            <div className="text-[11px] uppercase tracking-wider text-gray-500 font-semibold mb-1">
               In Progress
             </div>
-            <div className="text-2xl font-semibold text-blue-400">{inProgressKits.length}</div>
-            <div className="text-[11px] text-slate-400 mt-1">Active pipelines</div>
+            <div className="text-2xl font-bold text-blue-600">{inProgressKits.length}</div>
+            <div className="text-[11px] text-gray-500 mt-1">Active pipelines</div>
           </div>
 
           <div className="enterprise-card p-4">
-            <div className="text-[11px] uppercase tracking-wider text-slate-500 font-medium mb-1">
+            <div className="text-[11px] uppercase tracking-wider text-gray-500 font-semibold mb-1">
               Preparation Focus
             </div>
-            <div className="text-2xl font-semibold text-indigo-400">
+            <div className="text-2xl font-bold text-indigo-600">
               {kits.length > 0 ? `${readyKits.length}/${kits.length}` : '—'}
             </div>
-            <div className="text-[11px] text-slate-400 mt-1">Readiness ratio</div>
+            <div className="text-[11px] text-gray-500 mt-1">Completion ratio</div>
           </div>
         </div>
 
-        {/* Search & Status Filters */}
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-3 mb-6">
-          <div className="relative w-full sm:w-80">
-            <Search className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+        {/* Search & Filters */}
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 mb-6">
+          <div className="relative flex-1 max-w-sm">
+            <Search className="w-4 h-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" />
             <input
               type="text"
-              placeholder="Search company or role..."
+              placeholder="Search by company or job role..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-9 pr-3 py-1.5 bg-slate-900 border border-slate-800 rounded text-xs text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 transition-colors"
+              className="w-full pl-9 pr-3 py-1.5 text-xs bg-white border border-gray-300 rounded text-gray-900 placeholder-gray-400 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors shadow-sm"
             />
           </div>
 
-          <div className="flex items-center gap-1 self-start sm:self-auto">
+          {/* Status filter tabs */}
+          <div className="flex items-center gap-1 bg-gray-100 p-1 rounded border border-gray-200 self-start sm:self-auto text-xs">
             <button
               onClick={() => setStatusFilter('all')}
-              className={`px-3 py-1 text-xs font-medium rounded transition-colors ${
+              className={`px-3 py-1 font-medium rounded transition-colors ${
                 statusFilter === 'all'
-                  ? 'bg-slate-800 text-white border border-slate-700'
-                  : 'text-slate-400 hover:text-slate-200'
+                  ? 'bg-white text-gray-900 shadow-xs'
+                  : 'text-gray-600 hover:text-gray-900'
               }`}
             >
               All ({kits.length})
             </button>
             <button
               onClick={() => setStatusFilter('ready')}
-              className={`px-3 py-1 text-xs font-medium rounded transition-colors ${
+              className={`px-3 py-1 font-medium rounded transition-colors ${
                 statusFilter === 'ready'
-                  ? 'bg-slate-800 text-white border border-slate-700'
-                  : 'text-slate-400 hover:text-slate-200'
+                  ? 'bg-white text-gray-900 shadow-xs'
+                  : 'text-gray-600 hover:text-gray-900'
               }`}
             >
               Ready ({readyKits.length})
             </button>
             <button
               onClick={() => setStatusFilter('running')}
-              className={`px-3 py-1 text-xs font-medium rounded transition-colors ${
+              className={`px-3 py-1 font-medium rounded transition-colors ${
                 statusFilter === 'running'
-                  ? 'bg-slate-800 text-white border border-slate-700'
-                  : 'text-slate-400 hover:text-slate-200'
+                  ? 'bg-white text-gray-900 shadow-xs'
+                  : 'text-gray-600 hover:text-gray-900'
               }`}
             >
               In Progress ({inProgressKits.length})
@@ -209,152 +210,138 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        {/* Kit Grid / List */}
+        {/* Kits Table/Grid */}
         {kitsLoading ? (
-          <div className="flex items-center justify-center py-20">
-            <Loader2 className="w-6 h-6 text-blue-500 animate-spin" />
+          <div className="space-y-3">
+            {[1, 2, 3].map((i) => (
+              <div key={i} className="enterprise-card p-5 animate-pulse flex items-center justify-between">
+                <div className="space-y-2">
+                  <div className="h-4 w-40 bg-gray-200 rounded" />
+                  <div className="h-3 w-64 bg-gray-100 rounded" />
+                </div>
+                <div className="h-6 w-20 bg-gray-100 rounded" />
+              </div>
+            ))}
           </div>
         ) : filteredKits.length === 0 ? (
           <div className="enterprise-card p-12 text-center">
-            <div className="w-10 h-10 rounded-full bg-slate-800 text-slate-400 flex items-center justify-center mx-auto mb-3 border border-slate-700">
-              <FolderArchive className="w-5 h-5" />
+            <div className="w-12 h-12 rounded-full bg-gray-100 text-gray-400 flex items-center justify-center mx-auto mb-3 border border-gray-200">
+              <FolderArchive className="w-6 h-6" />
             </div>
-            <h2 className="text-sm font-semibold text-white mb-1">
-              {searchQuery ? 'No matching interview kits' : 'No interview kits created yet'}
-            </h2>
-            <p className="text-xs text-slate-400 max-w-sm mx-auto mb-5 leading-relaxed">
+            <h3 className="text-sm font-semibold text-gray-900">
+              {searchQuery ? 'No matching kits found' : 'No interview kits created yet'}
+            </h3>
+            <p className="text-xs text-gray-500 mt-1 max-w-sm mx-auto">
               {searchQuery
-                ? 'Try adjusting your search query or filter settings.'
-                : 'Create your first personalized preparation kit with tailored questions, flashcards, and a day-by-day study schedule.'}
+                ? 'Try refining your search keyword or clearing the status filter.'
+                : 'Create your first personalized interview prep kit from a job description to begin targeted preparation.'}
             </p>
             {!searchQuery && (
-              <Link
-                href="/kits/new"
-                className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white text-xs font-medium rounded transition-colors"
-              >
-                <Plus className="w-3.5 h-3.5" />
-                Create Interview Kit
-              </Link>
+              <div className="mt-5">
+                <Link
+                  href="/kits/new"
+                  className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-blue-600 hover:bg-blue-700 text-white text-xs font-medium rounded shadow-sm transition-colors"
+                >
+                  <Plus className="w-3.5 h-3.5" />
+                  <span>Create Interview Kit</span>
+                </Link>
+              </div>
             )}
           </div>
         ) : (
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-            {filteredKits.map((kit) => (
-              <KitItemCard key={kit.id} kit={kit} />
-            ))}
+          <div className="space-y-3">
+            {filteredKits.map((kit) => {
+              const isRunning = kit.status === 'queued' || kit.status === 'running';
+              const targetUrl = isRunning ? `/kits/${kit.id}/progress` : `/kits/${kit.id}`;
+              const daysRemaining = kit.daysAvailable;
+
+              return (
+                <div
+                  key={kit.id}
+                  className="enterprise-card-interactive p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 group"
+                  onClick={() => router.push(targetUrl)}
+                >
+                  {/* Left: Company & Role */}
+                  <div className="min-w-0 flex-1">
+                    <div className="flex items-center gap-2 mb-1 flex-wrap">
+                      <span className="font-semibold text-sm text-gray-900 tracking-tight group-hover:text-blue-600 transition-colors">
+                        {kit.company}
+                      </span>
+                      <span className="text-gray-300">•</span>
+                      <span className="text-xs text-gray-600 font-medium truncate">
+                        {kit.role}
+                      </span>
+                      <Badge variant={STATUS_VARIANTS[kit.status] || 'default'} className="ml-1">
+                        {STATUS_LABELS[kit.status] || kit.status}
+                      </Badge>
+                    </div>
+
+                    <div className="flex items-center gap-4 text-xs text-gray-500 flex-wrap mt-2">
+                      <span className="inline-flex items-center gap-1">
+                        <Clock className="w-3.5 h-3.5 text-gray-400" />
+                        <span>Created {new Date(kit.createdAt).toLocaleDateString()}</span>
+                      </span>
+                      <span className="inline-flex items-center gap-1">
+                        <Calendar className="w-3.5 h-3.5 text-gray-400" />
+                        <span>{daysRemaining} day study plan</span>
+                      </span>
+                      {kit.status === 'completed' && (
+                        <span className="inline-flex items-center gap-1 text-emerald-700">
+                          <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                          <span>Coverage Verified</span>
+                        </span>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Right: Actions */}
+                  <div className="flex items-center gap-2 self-end sm:self-center">
+                    {isRunning ? (
+                      <Link
+                        href={`/kits/${kit.id}/progress`}
+                        onClick={(e) => e.stopPropagation()}
+                        className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-blue-50 hover:bg-blue-100 text-blue-700 text-xs font-medium rounded border border-blue-200 transition-colors"
+                      >
+                        <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                        <span>View Progress</span>
+                      </Link>
+                    ) : (
+                      <>
+                        <Link
+                          href={`/kits/${kit.id}/practice`}
+                          onClick={(e) => e.stopPropagation()}
+                          className="inline-flex items-center gap-1 px-3 py-1.5 bg-gray-50 hover:bg-gray-100 text-gray-700 text-xs font-medium rounded border border-gray-200 transition-colors"
+                          title="Open Practice Mode"
+                        >
+                          <BookOpen className="w-3.5 h-3.5 text-gray-500" />
+                          <span>Practice</span>
+                        </Link>
+                        <Link
+                          href={`/kits/${kit.id}/radar`}
+                          onClick={(e) => e.stopPropagation()}
+                          className="inline-flex items-center gap-1 px-3 py-1.5 bg-gray-50 hover:bg-gray-100 text-gray-700 text-xs font-medium rounded border border-gray-200 transition-colors"
+                          title="Open Weakness Radar"
+                        >
+                          <Compass className="w-3.5 h-3.5 text-gray-500" />
+                          <span>Radar</span>
+                        </Link>
+                        <Link
+                          href={`/kits/${kit.id}`}
+                          onClick={(e) => e.stopPropagation()}
+                          className="inline-flex items-center gap-1 px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-medium rounded transition-colors shadow-xs"
+                        >
+                          <span>Open Kit</span>
+                          <ArrowRight className="w-3.5 h-3.5" />
+                        </Link>
+                      </>
+                    )}
+                  </div>
+                </div>
+              );
+            })}
           </div>
         )}
       </main>
-    </div>
-  );
-}
-
-function KitItemCard({ kit }: { kit: KitListItem }) {
-  const isRunning = kit.status === 'queued' || kit.status === 'running';
-  const isReady = kit.status === 'completed' || kit.status === 'partial';
-
-  const initials = kit.company
-    .replace(/^https?:\/\//, '')
-    .replace(/^www\./, '')
-    .slice(0, 2)
-    .toUpperCase();
-
-  return (
-    <div className="enterprise-card p-5 flex flex-col justify-between hover:border-slate-700">
-      <div>
-        {/* Top Header */}
-        <div className="flex items-start justify-between gap-2 mb-3">
-          <div className="flex items-center gap-2.5 min-w-0">
-            <div className="w-8 h-8 rounded bg-slate-800 border border-slate-700 flex items-center justify-center text-xs font-semibold text-slate-200 tracking-wider flex-shrink-0">
-              {initials}
-            </div>
-            <div className="min-w-0">
-              <h3 className="font-semibold text-sm text-white truncate" title={kit.company}>
-                {kit.company}
-              </h3>
-              <p className="text-xs text-slate-400 truncate" title={kit.role}>
-                {kit.role}
-              </p>
-            </div>
-          </div>
-
-          <Badge variant={STATUS_VARIANTS[kit.status] ?? 'default'}>
-            {STATUS_LABELS[kit.status] ?? kit.status}
-          </Badge>
-        </div>
-
-        {/* Progress Display if Running */}
-        {isRunning && kit.progress && (
-          <div className="my-4 p-3 rounded bg-slate-900 border border-slate-800">
-            <div className="flex items-center justify-between text-xs text-slate-400 mb-1.5">
-              <span className="flex items-center gap-1.5 capitalize">
-                <Loader2 className="w-3 h-3 text-blue-400 animate-spin" />
-                {kit.progress.stage?.replace(/_/g, ' ') ?? 'Processing...'}
-              </span>
-              <span className="font-mono text-[11px] text-slate-300">
-                {kit.progress.percentage ?? 0}%
-              </span>
-            </div>
-            <div className="h-1 bg-slate-800 rounded-full overflow-hidden">
-              <div
-                className="h-full bg-blue-500 rounded-full transition-all duration-300"
-                style={{ width: `${kit.progress.percentage ?? 0}%` }}
-              />
-            </div>
-          </div>
-        )}
-
-        {/* Metadata */}
-        <div className="grid grid-cols-2 gap-2 text-[11px] text-slate-400 py-3 border-t border-slate-800/80 my-3">
-          <div className="flex items-center gap-1.5">
-            <Calendar className="w-3.5 h-3.5 text-slate-500" />
-            <span>{kit.daysAvailable} Day Schedule</span>
-          </div>
-          <div className="flex items-center gap-1.5">
-            <Clock className="w-3.5 h-3.5 text-slate-500" />
-            <span>{new Date(kit.createdAt).toLocaleDateString()}</span>
-          </div>
-        </div>
-      </div>
-
-      {/* Footer CTA */}
-      <div className="flex items-center justify-between pt-2 border-t border-slate-800/80">
-        {isReady ? (
-          <div className="flex items-center gap-2 w-full">
-            <Link
-              href={`/kits/${kit.id}`}
-              className="flex-1 inline-flex items-center justify-center gap-1.5 px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-medium rounded border border-slate-700 transition-colors"
-            >
-              Open Kit
-              <ArrowRight className="w-3.5 h-3.5" />
-            </Link>
-            <Link
-              href={`/kits/${kit.id}/practice`}
-              className="inline-flex items-center justify-center p-1.5 bg-blue-600/10 hover:bg-blue-600/20 text-blue-400 hover:text-blue-300 text-xs font-medium rounded border border-blue-500/20 transition-colors"
-              title="Practice Flashcards"
-            >
-              <BookOpen className="w-4 h-4" />
-            </Link>
-            <Link
-              href={`/kits/${kit.id}/radar`}
-              className="inline-flex items-center justify-center p-1.5 bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-slate-200 text-xs font-medium rounded border border-slate-700 transition-colors"
-              title="Weakness Radar"
-            >
-              <Compass className="w-4 h-4" />
-            </Link>
-          </div>
-        ) : isRunning ? (
-          <Link
-            href={`/kits/${kit.id}/progress`}
-            className="w-full inline-flex items-center justify-center gap-1.5 px-3 py-1.5 bg-blue-600/10 hover:bg-blue-600/20 text-blue-400 text-xs font-medium rounded border border-blue-500/20 transition-colors"
-          >
-            View Pipeline Progress
-            <ArrowRight className="w-3.5 h-3.5" />
-          </Link>
-        ) : (
-          <span className="text-xs text-slate-500">Pipeline stopped</span>
-        )}
-      </div>
     </div>
   );
 }

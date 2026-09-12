@@ -39,8 +39,8 @@ export default function NewKitPage() {
 
   if (authLoading) {
     return (
-      <div className="min-h-screen bg-slate-950 flex items-center justify-center">
-        <Loader2 className="w-6 h-6 text-blue-500 animate-spin" />
+      <div className="min-h-screen bg-[#F8F9FB] flex items-center justify-center">
+        <Loader2 className="w-6 h-6 text-blue-600 animate-spin" />
       </div>
     );
   }
@@ -123,27 +123,27 @@ Responsibilities:
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 flex flex-col text-slate-100">
+    <div className="min-h-screen bg-[#F8F9FB] flex flex-col text-gray-900">
       <AppHeader />
 
       <main className="flex-1 max-w-4xl w-full mx-auto px-4 sm:px-6 py-8">
         {/* Breadcrumb navigation */}
-        <div className="flex items-center gap-2 text-xs text-slate-400 mb-4">
-          <Link href="/dashboard" className="hover:text-white flex items-center gap-1">
+        <div className="flex items-center gap-2 text-xs text-gray-500 mb-4">
+          <Link href="/dashboard" className="hover:text-gray-900 flex items-center gap-1 font-medium">
             <ArrowLeft className="w-3 h-3" />
             <span>Dashboard</span>
           </Link>
           <span>/</span>
-          <span className="text-slate-200">New Interview Kit</span>
+          <span className="text-gray-900 font-semibold">New Interview Kit</span>
         </div>
 
         {/* Page Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-6 border-b border-slate-800/80 mb-8">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-6 border-b border-gray-200 mb-8">
           <div>
-            <h1 className="text-xl sm:text-2xl font-semibold text-white tracking-tight">
+            <h1 className="text-xl sm:text-2xl font-bold text-gray-900 tracking-tight">
               Create Interview Preparation Kit
             </h1>
-            <p className="text-xs sm:text-sm text-slate-400 mt-0.5">
+            <p className="text-xs sm:text-sm text-gray-500 mt-0.5">
               Specify your target job role and company website to configure the autonomous research and question pipeline.
             </p>
           </div>
@@ -151,19 +151,19 @@ Responsibilities:
           <button
             type="button"
             onClick={handleSampleFill}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-xs font-medium text-slate-300 rounded border border-slate-800 transition-colors self-start sm:self-auto"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white hover:bg-gray-50 text-xs font-medium text-gray-700 rounded border border-gray-300 shadow-xs transition-colors self-start sm:self-auto"
           >
-            <Sparkles className="w-3.5 h-3.5 text-blue-400" />
+            <Sparkles className="w-3.5 h-3.5 text-blue-600" />
             Fill Sample Senior JD
           </button>
         </div>
 
         {/* Error Alert */}
         {error && (
-          <div className="mb-6 p-4 rounded bg-red-500/10 border border-red-500/20 text-xs text-red-300 flex items-start gap-2.5" role="alert">
-            <AlertCircle className="w-4 h-4 text-red-400 flex-shrink-0 mt-0.5" />
+          <div className="mb-6 p-4 rounded bg-red-50 border border-red-200 text-xs text-red-700 flex items-start gap-2.5" role="alert">
+            <AlertCircle className="w-4 h-4 text-red-600 flex-shrink-0 mt-0.5" />
             <div className="flex-1">
-              <span className="font-semibold text-red-200">Configuration Error: </span>
+              <span className="font-semibold text-red-800">Configuration Error: </span>
               {error}
             </div>
           </div>
@@ -173,20 +173,20 @@ Responsibilities:
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Step 01: Company Information */}
           <div className="enterprise-card p-6">
-            <div className="flex items-center gap-2 pb-3 mb-4 border-b border-slate-800/80">
-              <span className="text-xs font-mono font-semibold px-2 py-0.5 rounded bg-blue-600/10 text-blue-400 border border-blue-500/20">
+            <div className="flex items-center gap-2 pb-3 mb-4 border-b border-gray-100">
+              <span className="text-xs font-mono font-semibold px-2 py-0.5 rounded bg-blue-50 text-blue-700 border border-blue-200">
                 STEP 01
               </span>
-              <h2 className="text-sm font-semibold text-white">Target Company Information</h2>
+              <h2 className="text-sm font-semibold text-gray-900">Target Company Information</h2>
             </div>
 
             <div className="grid sm:grid-cols-2 gap-4">
               <div>
-                <label htmlFor="companyUrl" className="block text-xs font-medium text-slate-300 mb-1">
-                  Company Website URL <span className="text-red-400">*</span>
+                <label htmlFor="companyUrl" className="block text-xs font-medium text-gray-700 mb-1">
+                  Company Website URL <span className="text-red-500">*</span>
                 </label>
                 <div className="relative">
-                  <Globe className="w-3.5 h-3.5 text-slate-500 absolute left-3 top-1/2 -translate-y-1/2" />
+                  <Globe className="w-3.5 h-3.5 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" />
                   <input
                     id="companyUrl"
                     type="url"
@@ -194,31 +194,31 @@ Responsibilities:
                     placeholder="https://company.com"
                     value={form.companyUrl}
                     onChange={(e) => setForm((f) => ({ ...f, companyUrl: e.target.value }))}
-                    className="w-full pl-9 pr-3 py-2 bg-slate-900 border border-slate-800 rounded text-xs text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 transition-colors font-mono"
+                    className="w-full pl-9 pr-3 py-2 bg-white border border-gray-300 rounded text-xs text-gray-900 placeholder-gray-400 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors font-mono"
                   />
                 </div>
-                <p className="text-[11px] text-slate-500 mt-1.5 leading-relaxed">
-                  Used by the autonomous crawler to research company engineering products, culture, and hiring processes.
+                <p className="text-[11px] text-gray-500 mt-1.5 leading-relaxed">
+                  The crawler will perform same-origin inspection of public mission, engineering architecture, and interview processes.
                 </p>
               </div>
 
               <div>
-                <label htmlFor="companyName" className="block text-xs font-medium text-slate-300 mb-1">
-                  Company Name <span className="text-slate-500 text-[11px] font-normal">(Optional)</span>
+                <label htmlFor="companyName" className="block text-xs font-medium text-gray-700 mb-1">
+                  Company Name <span className="text-gray-400 text-[10px] font-normal">(optional override)</span>
                 </label>
                 <div className="relative">
-                  <Building2 className="w-3.5 h-3.5 text-slate-500 absolute left-3 top-1/2 -translate-y-1/2" />
+                  <Building2 className="w-3.5 h-3.5 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" />
                   <input
                     id="companyName"
                     type="text"
                     placeholder="e.g. Stripe, GitHub, Vercel"
                     value={form.companyName}
                     onChange={(e) => setForm((f) => ({ ...f, companyName: e.target.value }))}
-                    className="w-full pl-9 pr-3 py-2 bg-slate-900 border border-slate-800 rounded text-xs text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 transition-colors"
+                    className="w-full pl-9 pr-3 py-2 bg-white border border-gray-300 rounded text-xs text-gray-900 placeholder-gray-400 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors"
                   />
                 </div>
-                <p className="text-[11px] text-slate-500 mt-1.5 leading-relaxed">
-                  Optional override; if left empty, company name is parsed dynamically from the domain.
+                <p className="text-[11px] text-gray-500 mt-1.5 leading-relaxed">
+                  If left blank, the company name will be inferred automatically from the website domain and page headers.
                 </p>
               </div>
             </div>
@@ -226,19 +226,19 @@ Responsibilities:
 
           {/* Step 02: Job Description */}
           <div className="enterprise-card p-6">
-            <div className="flex items-center gap-2 pb-3 mb-4 border-b border-slate-800/80">
-              <span className="text-xs font-mono font-semibold px-2 py-0.5 rounded bg-blue-600/10 text-blue-400 border border-blue-500/20">
+            <div className="flex items-center gap-2 pb-3 mb-4 border-b border-gray-100">
+              <span className="text-xs font-mono font-semibold px-2 py-0.5 rounded bg-blue-50 text-blue-700 border border-blue-200">
                 STEP 02
               </span>
-              <h2 className="text-sm font-semibold text-white">Job Description &amp; Requirements</h2>
+              <h2 className="text-sm font-semibold text-gray-900">Job Description & Role Requirements</h2>
             </div>
 
             <div>
               <div className="flex items-center justify-between mb-1">
-                <label htmlFor="jobDescription" className="block text-xs font-medium text-slate-300">
-                  Full Job Description <span className="text-red-400">*</span>
+                <label htmlFor="jobDescription" className="block text-xs font-medium text-gray-700">
+                  Full Job Description <span className="text-red-500">*</span>
                 </label>
-                <span className="text-[11px] font-mono text-slate-500">
+                <span className="text-[11px] font-mono text-gray-400">
                   {form.jobDescription.length} characters
                 </span>
               </div>
@@ -246,32 +246,32 @@ Responsibilities:
                 id="jobDescription"
                 required
                 rows={10}
-                placeholder="Paste the complete job description here, including responsibilities, required skills, and nice-to-have qualifications..."
+                placeholder="Paste the full job specification including requirements, tech stack, and responsibilities..."
                 value={form.jobDescription}
                 onChange={(e) => setForm((f) => ({ ...f, jobDescription: e.target.value }))}
-                className="w-full p-3 bg-slate-900 border border-slate-800 rounded text-xs text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 transition-colors font-mono leading-relaxed"
+                className="w-full p-3 bg-white border border-gray-300 rounded text-xs text-gray-900 placeholder-gray-400 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors font-mono leading-relaxed resize-y"
               />
-              <p className="text-[11px] text-slate-500 mt-1.5 leading-relaxed">
-                Requirements are extracted verbatim with strict technical/behavioural classification. Zero technologies are invented.
+              <p className="text-[11px] text-gray-500 mt-1.5 leading-relaxed">
+                Requirements are strictly extracted and categorized into Must-Have vs Nice-to-Have with zero external hallucinations.
               </p>
             </div>
           </div>
 
-          {/* Step 03: Preparation Timeline */}
+          {/* Step 03: Study Plan Horizon */}
           <div className="enterprise-card p-6">
-            <div className="flex items-center gap-2 pb-3 mb-4 border-b border-slate-800/80">
-              <span className="text-xs font-mono font-semibold px-2 py-0.5 rounded bg-blue-600/10 text-blue-400 border border-blue-500/20">
+            <div className="flex items-center gap-2 pb-3 mb-4 border-b border-gray-100">
+              <span className="text-xs font-mono font-semibold px-2 py-0.5 rounded bg-blue-50 text-blue-700 border border-blue-200">
                 STEP 03
               </span>
-              <h2 className="text-sm font-semibold text-white">Preparation Timeline</h2>
+              <h2 className="text-sm font-semibold text-gray-900">Preparation Timeline</h2>
             </div>
 
             <div className="max-w-xs">
-              <label htmlFor="daysAvailable" className="block text-xs font-medium text-slate-300 mb-1">
-                Days Available Before Interview
+              <label htmlFor="daysAvailable" className="block text-xs font-medium text-gray-700 mb-1">
+                Available Preparation Days <span className="text-red-500">*</span>
               </label>
               <div className="relative">
-                <Calendar className="w-3.5 h-3.5 text-slate-500 absolute left-3 top-1/2 -translate-y-1/2" />
+                <Calendar className="w-3.5 h-3.5 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" />
                 <input
                   id="daysAvailable"
                   type="number"
@@ -279,29 +279,31 @@ Responsibilities:
                   max={60}
                   required
                   value={form.daysAvailable}
-                  onChange={(e) => setForm((f) => ({ ...f, daysAvailable: Math.max(1, parseInt(e.target.value) || 1) }))}
-                  className="w-full pl-9 pr-3 py-2 bg-slate-900 border border-slate-800 rounded text-xs text-white focus:outline-none focus:border-blue-500 transition-colors font-mono"
+                  onChange={(e) =>
+                    setForm((f) => ({ ...f, daysAvailable: Math.max(1, Math.min(60, parseInt(e.target.value) || 1)) }))
+                  }
+                  className="w-full pl-9 pr-3 py-2 bg-white border border-gray-300 rounded text-xs text-gray-900 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors font-mono"
                 />
               </div>
-              <p className="text-[11px] text-slate-500 mt-1.5 leading-relaxed">
-                The deterministic schedule allocator distributes questions and minutes across exactly this number of days.
+              <p className="text-[11px] text-gray-500 mt-1.5 leading-relaxed">
+                Between 1 and 60 days. The deterministic schedule engine will evenly distribute questions into daily time blocks (20–180 min).
               </p>
             </div>
           </div>
 
-          {/* Action Bar */}
-          <div className="flex items-center justify-between pt-4 border-t border-slate-800/80">
+          {/* Submission Row */}
+          <div className="flex items-center justify-between pt-2">
             <Link
               href="/dashboard"
-              className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-medium text-slate-400 hover:text-white hover:bg-slate-900 rounded border border-transparent hover:border-slate-800 transition-colors"
+              className="text-xs font-medium text-gray-500 hover:text-gray-900 transition-colors"
             >
-              Cancel
+              Cancel and return to dashboard
             </Link>
 
             <button
               type="submit"
               disabled={loading}
-              className="inline-flex items-center gap-2 px-5 py-2.5 bg-blue-600 hover:bg-blue-500 disabled:opacity-50 text-white text-xs sm:text-sm font-medium rounded transition-colors shadow-sm"
+              className="inline-flex items-center gap-2 px-5 py-2.5 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white text-xs sm:text-sm font-medium rounded transition-colors shadow-sm"
             >
               {loading ? (
                 <>

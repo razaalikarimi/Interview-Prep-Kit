@@ -27,112 +27,89 @@ export default function HomePage() {
   }, [user, loading, router]);
 
   return (
-    <div className="min-h-screen bg-slate-950 flex flex-col text-slate-100">
+    <div className="min-h-screen bg-[#F8F9FB] flex flex-col text-gray-900">
       <AppHeader />
 
-      <main className="flex-1 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
-        {/* Badge & Headline */}
-        <div className="text-center max-w-3xl mx-auto">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-900 border border-slate-800 text-xs text-slate-300 mb-6">
-            <ShieldCheck className="w-3.5 h-3.5 text-blue-400" />
-            <span>Deterministic Engineering Assessment Platform</span>
-          </div>
-
-          <h1 className="text-3xl sm:text-5xl font-semibold text-white tracking-tight leading-tight mb-5">
-            Enterprise Interview Preparation System
-          </h1>
-
-          <p className="text-base sm:text-lg text-slate-400 leading-relaxed max-w-2xl mx-auto mb-8">
-            Extract verbatim job requirements, synthesize deep company research, generate targeted questions across four categories, and build a deterministic day-by-day study schedule.
-          </p>
-
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
-            <Link
-              href="/dashboard"
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white text-sm font-medium rounded transition-colors"
-            >
-              Open Dashboard
-              <ArrowRight className="w-4 h-4" />
-            </Link>
-            <Link
-              href="/kits/new"
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-slate-900 hover:bg-slate-800 text-slate-200 text-sm font-medium rounded border border-slate-800 transition-colors"
-            >
-              Create Interview Kit
-            </Link>
-          </div>
+      <main className="flex-1 flex flex-col items-center justify-center px-4 sm:px-6 py-16 text-center max-w-4xl mx-auto">
+        {/* Status Pill */}
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 border border-blue-200 text-xs text-blue-700 font-medium mb-6">
+          <ShieldCheck className="w-3.5 h-3.5" />
+          <span>Enterprise Technical Interview Preparation System</span>
         </div>
 
-        {/* Feature Grid */}
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-20">
-          <div className="enterprise-card p-5">
-            <div className="w-8 h-8 rounded bg-slate-800 flex items-center justify-center text-blue-400 mb-3 border border-slate-700">
-              <FileText className="w-4 h-4" />
-            </div>
-            <h2 className="text-sm font-semibold text-white mb-1.5">Requirement Extraction</h2>
-            <p className="text-xs text-slate-400 leading-relaxed">
-              Extracts must-have vs nice-to-have competencies directly from raw job descriptions with zero hallucinated technologies.
-            </p>
-          </div>
+        {/* Hero Headline */}
+        <h1 className="text-3xl sm:text-5xl font-bold tracking-tight text-gray-900 max-w-3xl leading-tight">
+          Precision Interview Preparation for Technical Roles
+        </h1>
 
+        <p className="mt-4 text-base sm:text-lg text-gray-600 max-w-2xl leading-relaxed">
+          Transform any job description and company website into an autonomous, verified preparation kit with role coverage verification, targeted flashcards, and structured study plans.
+        </p>
+
+        {/* CTA Group */}
+        <div className="mt-8 flex flex-col sm:flex-row items-center gap-3">
+          <Link
+            href="/register"
+            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded text-sm shadow-sm transition-colors"
+          >
+            <span>Start Preparation Free</span>
+            <ArrowRight className="w-4 h-4" />
+          </Link>
+          <Link
+            href="/login"
+            className="w-full sm:w-auto inline-flex items-center justify-center px-6 py-3 bg-white hover:bg-gray-50 text-gray-700 font-medium rounded text-sm border border-gray-300 shadow-sm transition-colors"
+          >
+            Sign In to Existing Account
+          </Link>
+        </div>
+
+        {/* Enterprise Architecture Features */}
+        <div className="mt-16 grid sm:grid-cols-3 gap-4 w-full text-left">
           <div className="enterprise-card p-5">
-            <div className="w-8 h-8 rounded bg-slate-800 flex items-center justify-center text-emerald-400 mb-3 border border-slate-700">
+            <div className="w-8 h-8 rounded bg-blue-50 text-blue-600 flex items-center justify-center mb-3 border border-blue-100">
               <Search className="w-4 h-4" />
             </div>
-            <h2 className="text-sm font-semibold text-white mb-1.5">Autonomous Research</h2>
-            <p className="text-xs text-slate-400 leading-relaxed">
-              Deep link discovery and content ranking across company engineering blogs and hiring signals, protected with multi-layer SSRF validation.
+            <h3 className="text-sm font-semibold text-gray-900">Same-Origin Company Research</h3>
+            <p className="text-xs text-gray-500 mt-1 leading-relaxed">
+              Safe recursive crawling extracts mission, engineering architecture, and interview processes from official public sources.
             </p>
           </div>
 
           <div className="enterprise-card p-5">
-            <div className="w-8 h-8 rounded bg-slate-800 flex items-center justify-center text-indigo-400 mb-3 border border-slate-700">
+            <div className="w-8 h-8 rounded bg-emerald-50 text-emerald-600 flex items-center justify-center mb-3 border border-emerald-100">
               <CheckCircle2 className="w-4 h-4" />
             </div>
-            <h2 className="text-sm font-semibold text-white mb-1.5">Deterministic Coverage Loop</h2>
-            <p className="text-xs text-slate-400 leading-relaxed">
-              Mathematical coverage verification checks questions against every required skill, closing uncovered gaps in up to three bounded passes.
+            <h3 className="text-sm font-semibold text-gray-900">Deterministic Coverage Checking</h3>
+            <p className="text-xs text-gray-500 mt-1 leading-relaxed">
+              Multi-pass algorithms guarantee that every must-have and nice-to-have qualification has associated practice material.
             </p>
           </div>
 
           <div className="enterprise-card p-5">
-            <div className="w-8 h-8 rounded bg-slate-800 flex items-center justify-center text-amber-400 mb-3 border border-slate-700">
+            <div className="w-8 h-8 rounded bg-indigo-50 text-indigo-600 flex items-center justify-center mb-3 border border-indigo-100">
               <Calendar className="w-4 h-4" />
             </div>
-            <h2 className="text-sm font-semibold text-white mb-1.5">Algorithmic Study Schedule</h2>
-            <p className="text-xs text-slate-400 leading-relaxed">
-              Application code calculates integer study minutes and prioritizes difficult, high-stakes requirements on earlier days.
-            </p>
-          </div>
-
-          <div className="enterprise-card p-5">
-            <div className="w-8 h-8 rounded bg-slate-800 flex items-center justify-center text-purple-400 mb-3 border border-slate-700">
-              <Layers className="w-4 h-4" />
-            </div>
-            <h2 className="text-sm font-semibold text-white mb-1.5">Preservation Engine</h2>
-            <p className="text-xs text-slate-400 leading-relaxed">
-              Manually edited and pinned questions survive category regeneration. Optimistic concurrency control prevents stale updates.
-            </p>
-          </div>
-
-          <div className="enterprise-card p-5">
-            <div className="w-8 h-8 rounded bg-slate-800 flex items-center justify-center text-cyan-400 mb-3 border border-slate-700">
-              <Compass className="w-4 h-4" />
-            </div>
-            <h2 className="text-sm font-semibold text-white mb-1.5">Weakness Radar</h2>
-            <p className="text-xs text-slate-400 leading-relaxed">
-              Spaced repetition engine tracks flashcard confidence and recency decay to highlight high-priority knowledge gaps.
+            <h3 className="text-sm font-semibold text-gray-900">Study Timeline Planner</h3>
+            <p className="text-xs text-gray-500 mt-1 leading-relaxed">
+              Calculates daily study allocations (20–180 min) prioritizing foundational core skills before advanced domain scenarios.
             </p>
           </div>
         </div>
 
-        {/* Evaluation Metadata Footer */}
-        <div className="mt-16 pt-8 border-t border-slate-900 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 gap-4">
-          <div className="flex items-center gap-2">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-            <span>AI Interview Prep Kit • Production Assessment Edition</span>
+        {/* Feature Checkpoints */}
+        <div className="mt-12 flex flex-wrap items-center justify-center gap-6 text-xs text-gray-500 border-t border-gray-200 pt-8 w-full">
+          <div className="flex items-center gap-1.5">
+            <Layers className="w-3.5 h-3.5 text-gray-400" />
+            <span>Preserves user-edited questions on regenerate</span>
           </div>
-          <div>All backend services &amp; evaluation endpoints operational</div>
+          <div className="flex items-center gap-1.5">
+            <Compass className="w-3.5 h-3.5 text-gray-400" />
+            <span>Spaced repetition with confidence scoring</span>
+          </div>
+          <div className="flex items-center gap-1.5">
+            <FileText className="w-3.5 h-3.5 text-gray-400" />
+            <span>Batch evaluation CLI included</span>
+          </div>
         </div>
       </main>
     </div>

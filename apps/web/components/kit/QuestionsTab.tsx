@@ -101,7 +101,18 @@ export function QuestionsTab({ kitId, questions, requirements, version, onUpdate
     }
   };
 
-  // Filtering
+  // Copy outline to clipboard
+  const handleCopyOutline = async (id: string, text: string) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopiedId(id);
+      setTimeout(() => setCopiedId(null), 2000);
+    } catch {
+      // Ignore
+    }
+  };
+
+  // Filtered questions
   const filteredQuestions = useMemo(() => {
     return questions.filter((q) => {
       if (selectedCategory !== 'all' && q.category !== selectedCategory) return false;
@@ -109,20 +120,12 @@ export function QuestionsTab({ kitId, questions, requirements, version, onUpdate
       if (searchQuery.trim()) {
         const query = searchQuery.toLowerCase();
         const matchesPrompt = q.prompt.toLowerCase().includes(query);
-        const matchesAnswer = q.answer_outline.toLowerCase().includes(query);
-        const matchesId = q.id.toLowerCase().includes(query);
-        if (!matchesPrompt && !matchesAnswer && !matchesId) return false;
+        const matchesOutline = q.answer_outline.toLowerCase().includes(query);
+        if (!matchesPrompt && !matchesOutline) return false;
       }
       return true;
     });
   }, [questions, selectedCategory, difficultyFilter, searchQuery]);
-
-  // Copy Answer Outline
-  const handleCopyOutline = (id: string, text: string) => {
-    navigator.clipboard.writeText(text);
-    setCopiedId(id);
-    setTimeout(() => setCopiedId(null), 2000);
-  };
 
   // Pin Toggle
   const handlePinToggle = async (q: Question) => {
@@ -154,16 +157,17 @@ export function QuestionsTab({ kitId, questions, requirements, version, onUpdate
       setEditingQuestion(null);
       onUpdate();
     } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : 'Failed to save question edit.');
+      setError(err instanceof Error ? err.message : 'Failed to save question edits.');
     } finally {
       setSaving(false);
     }
   };
 
-  // Delete Handler
+  // Delete Handlers
   const handleConfirmDelete = async () => {
     if (!deletingQuestion) return;
     setDeleting(true);
+    setError('');
     try {
       await kitsApi.deleteQuestion(kitId, deletingQuestion.id);
       setDeletingQuestion(null);
@@ -179,12 +183,13 @@ export function QuestionsTab({ kitId, questions, requirements, version, onUpdate
   const handleAddQuestion = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!newQuestionForm.prompt.trim()) return;
+
     setSaving(true);
     setError('');
     try {
       await kitsApi.createQuestion(kitId, {
-        prompt: newQuestionForm.prompt,
-        answer_outline: newQuestionForm.answer_outline || 'Key answer points pending.',
+        prompt: newQuestionForm.prompt.trim(),
+        answer_outline: newQuestionForm.answer_outline.trim() || 'No outline specified.',
         category: newQuestionForm.category,
         difficulty: newQuestionForm.difficulty,
         requirement_ids: newQuestionForm.requirement_ids,
@@ -205,7 +210,7 @@ export function QuestionsTab({ kitId, questions, requirements, version, onUpdate
     }
   };
 
-  // Category Regeneration Handler
+  // Regeneration Handler
   const handleConfirmRegenerate = async () => {
     if (!regenCategory) return;
     setRegenerating(true);
@@ -233,17 +238,17 @@ export function QuestionsTab({ kitId, questions, requirements, version, onUpdate
     <div className="space-y-4 max-w-5xl animate-fade-in">
       {/* Error Alert */}
       {error && (
-        <div className="p-3 rounded bg-red-500/10 border border-red-500/20 text-xs text-red-300 flex items-start gap-2">
-          <AlertCircle className="w-4 h-4 text-red-400 flex-shrink-0 mt-0.5" />
+        <div className="p-3 rounded bg-red-50 border border-red-200 text-xs text-red-700 flex items-start gap-2">
+          <AlertCircle className="w-4 h-4 text-red-600 flex-shrink-0 mt-0.5" />
           <span>{error}</span>
         </div>
       )}
 
       {/* Control Bar: Filters & Actions */}
-      <div className="flex flex-col gap-3 pb-3 border-b border-slate-800">
+      <div className="flex flex-col gap-3 pb-3 border-b border-gray-200">
         {/* Category Tabs */}
         <div className="flex items-center justify-between gap-2 flex-wrap">
-          <div className="flex items-center gap-1 overflow-x-auto scrollbar-none">
+          <div className="flex items-center gap-1 overflow-x-auto scrollbar-none bg-gray-100 p-1 rounded border border-gray-200">
             {CATEGORIES.map((cat) => {
               const count =
                 cat.key === 'all'
@@ -256,8 +261,8 @@ export function QuestionsTab({ kitId, questions, requirements, version, onUpdate
                   onClick={() => setSelectedCategory(cat.key)}
                   className={`inline-flex items-center gap-1.5 px-3 py-1 text-xs font-medium rounded transition-colors whitespace-nowrap ${
                     isActive
-                      ? 'bg-slate-800 text-white border border-slate-700'
-                      : 'text-slate-400 hover:text-slate-200'
+                      ? 'bg-white text-gray-900 shadow-xs'
+                      : 'text-gray-600 hover:text-gray-900'
                   }`}
                 >
                   <span>{cat.label}</span>
@@ -273,9 +278,9 @@ export function QuestionsTab({ kitId, questions, requirements, version, onUpdate
               <button
                 type="button"
                 onClick={() => setRegenCategory(selectedCategory)}
-                className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-slate-900 hover:bg-slate-800 text-xs font-medium text-slate-300 rounded border border-slate-800 transition-colors"
+                className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-white hover:bg-gray-50 text-xs font-medium text-gray-700 rounded border border-gray-300 shadow-xs transition-colors"
               >
-                <RefreshCw className="w-3 h-3 text-slate-400" />
+                <RefreshCw className="w-3 h-3 text-gray-500" />
                 <span>Regenerate {selectedCategory}</span>
               </button>
             )}
@@ -283,7 +288,7 @@ export function QuestionsTab({ kitId, questions, requirements, version, onUpdate
             <button
               type="button"
               onClick={() => setIsAddingQuestion(true)}
-              className="inline-flex items-center gap-1.5 px-3 py-1 bg-blue-600 hover:bg-blue-500 text-xs font-medium text-white rounded transition-colors shadow-sm"
+              className="inline-flex items-center gap-1.5 px-3 py-1 bg-blue-600 hover:bg-blue-700 text-xs font-medium text-white rounded transition-colors shadow-xs"
             >
               <Plus className="w-3.5 h-3.5" />
               <span>Add Question</span>
@@ -294,27 +299,27 @@ export function QuestionsTab({ kitId, questions, requirements, version, onUpdate
         {/* Search & Filter Row */}
         <div className="flex flex-col sm:flex-row items-center justify-between gap-2.5">
           <div className="relative w-full sm:w-72">
-            <Search className="w-3.5 h-3.5 text-slate-500 absolute left-3 top-1/2 -translate-y-1/2" />
+            <Search className="w-3.5 h-3.5 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" />
             <input
               type="text"
               placeholder="Search questions or outline..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-9 pr-3 py-1 bg-slate-900 border border-slate-800 rounded text-xs text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 transition-colors"
+              className="w-full pl-9 pr-3 py-1 bg-white border border-gray-300 rounded text-xs text-gray-900 placeholder-gray-400 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors shadow-xs"
             />
           </div>
 
-          <div className="flex items-center gap-2 self-start sm:self-auto text-xs text-slate-400">
+          <div className="flex items-center gap-2 self-start sm:self-auto text-xs text-gray-500">
             <span>Difficulty:</span>
-            <div className="flex items-center gap-1">
+            <div className="flex items-center gap-1 bg-gray-100 p-0.5 rounded border border-gray-200">
               {(['all', '1', '2', '3'] as const).map((diff) => (
                 <button
                   key={diff}
                   onClick={() => setDifficultyFilter(diff)}
                   className={`px-2 py-0.5 rounded text-[11px] font-mono uppercase transition-colors ${
                     difficultyFilter === diff
-                      ? 'bg-slate-800 text-white font-semibold border border-slate-700'
-                      : 'text-slate-400 hover:text-slate-200'
+                      ? 'bg-white text-gray-900 font-semibold shadow-xs'
+                      : 'text-gray-600 hover:text-gray-900'
                   }`}
                 >
                   {diff === 'all' ? 'All' : diff === '1' ? 'Easy' : diff === '2' ? 'Med' : 'Hard'}
@@ -322,11 +327,11 @@ export function QuestionsTab({ kitId, questions, requirements, version, onUpdate
               ))}
             </div>
 
-            <span className="text-slate-700">|</span>
+            <span className="text-gray-300">|</span>
 
             <button
               onClick={handleExpandAll}
-              className="text-xs text-slate-400 hover:text-slate-200 transition-colors"
+              className="text-xs text-gray-600 hover:text-gray-900 transition-colors font-medium"
             >
               {expandedIds.size === filteredQuestions.length ? 'Collapse All' : 'Expand All'}
             </button>
@@ -336,15 +341,15 @@ export function QuestionsTab({ kitId, questions, requirements, version, onUpdate
 
       {/* Question List */}
       {filteredQuestions.length === 0 ? (
-        <div className="enterprise-card p-10 text-center text-xs text-slate-400">
-          <p className="mb-2 font-medium text-slate-300">No questions found matching the selected filters.</p>
+        <div className="enterprise-card p-10 text-center text-xs text-gray-500">
+          <p className="mb-2 font-medium text-gray-700">No questions found matching the selected filters.</p>
           <button
             onClick={() => {
               setSelectedCategory('all');
               setDifficultyFilter('all');
               setSearchQuery('');
             }}
-            className="text-blue-400 hover:underline text-[11px]"
+            className="text-blue-600 hover:underline text-[11px] font-medium"
           >
             Reset Filters
           </button>
@@ -360,7 +365,7 @@ export function QuestionsTab({ kitId, questions, requirements, version, onUpdate
               <div
                 key={q.id}
                 className={`enterprise-card transition-colors ${
-                  isPinned ? 'border-amber-500/40 bg-amber-500/5' : ''
+                  isPinned ? 'border-amber-300 bg-amber-50/20' : ''
                 }`}
               >
                 {/* Collapsed Header Bar */}
@@ -372,18 +377,18 @@ export function QuestionsTab({ kitId, questions, requirements, version, onUpdate
                     <button
                       type="button"
                       aria-label="Expand question"
-                      className="text-slate-500 hover:text-slate-300 mt-0.5"
+                      className="text-gray-400 hover:text-gray-600 mt-0.5"
                     >
                       {isExpanded ? (
-                        <ChevronDown className="w-4 h-4 text-slate-400" />
+                        <ChevronDown className="w-4 h-4 text-gray-500" />
                       ) : (
-                        <ChevronRight className="w-4 h-4 text-slate-400" />
+                        <ChevronRight className="w-4 h-4 text-gray-500" />
                       )}
                     </button>
 
                     <div className="min-w-0 flex-1">
                       <div className="flex items-center gap-2 mb-1 flex-wrap">
-                        <span className="font-mono text-[10px] text-slate-500 px-1 py-0.2 rounded bg-slate-900 border border-slate-800">
+                        <span className="font-mono text-[10px] text-gray-600 px-1 py-0.2 rounded bg-gray-100 border border-gray-200">
                           {q.id}
                         </span>
 
@@ -396,19 +401,19 @@ export function QuestionsTab({ kitId, questions, requirements, version, onUpdate
                         </Badge>
 
                         {isPinned && (
-                          <span className="inline-flex items-center gap-1 text-[10px] font-mono text-amber-400 bg-amber-500/10 px-1.5 py-0.2 rounded border border-amber-500/20">
-                            <Pin className="w-2.5 h-2.5 fill-amber-400" /> Pinned
+                          <span className="inline-flex items-center gap-1 text-[10px] font-mono text-amber-700 bg-amber-50 px-1.5 py-0.2 rounded border border-amber-200 font-medium">
+                            <Pin className="w-2.5 h-2.5 fill-amber-600 text-amber-600" /> Pinned
                           </span>
                         )}
 
                         {isEdited && (
-                          <span className="text-[10px] font-mono text-blue-400 bg-blue-500/10 px-1.5 py-0.2 rounded border border-blue-500/20">
+                          <span className="text-[10px] font-mono text-blue-700 bg-blue-50 px-1.5 py-0.2 rounded border border-blue-200 font-medium">
                             Edited
                           </span>
                         )}
                       </div>
 
-                      <h3 className="text-xs sm:text-sm font-medium text-slate-200 leading-snug">
+                      <h3 className="text-xs sm:text-sm font-semibold text-gray-900 leading-snug">
                         {q.prompt}
                       </h3>
                     </div>
@@ -422,18 +427,18 @@ export function QuestionsTab({ kitId, questions, requirements, version, onUpdate
                       title={isPinned ? 'Unpin question' : 'Pin question (protects from regeneration)'}
                       className={`p-1.5 rounded transition-colors ${
                         isPinned
-                          ? 'text-amber-400 hover:bg-amber-500/20'
-                          : 'text-slate-500 hover:text-slate-300 hover:bg-slate-800'
+                          ? 'text-amber-600 hover:bg-amber-100'
+                          : 'text-gray-400 hover:text-gray-700 hover:bg-gray-100'
                       }`}
                     >
-                      <Pin className={`w-3.5 h-3.5 ${isPinned ? 'fill-amber-400' : ''}`} />
+                      <Pin className={`w-3.5 h-3.5 ${isPinned ? 'fill-amber-600' : ''}`} />
                     </button>
 
                     <button
                       type="button"
                       onClick={() => handleStartEdit(q)}
                       title="Edit question"
-                      className="p-1.5 text-slate-500 hover:text-slate-300 hover:bg-slate-800 rounded transition-colors"
+                      className="p-1.5 text-gray-400 hover:text-gray-700 hover:bg-gray-100 rounded transition-colors"
                     >
                       <Edit3 className="w-3.5 h-3.5" />
                     </button>
@@ -442,7 +447,7 @@ export function QuestionsTab({ kitId, questions, requirements, version, onUpdate
                       type="button"
                       onClick={() => setDeletingQuestion(q)}
                       title="Delete question"
-                      className="p-1.5 text-slate-500 hover:text-red-400 hover:bg-red-500/10 rounded transition-colors"
+                      className="p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded transition-colors"
                     >
                       <Trash2 className="w-3.5 h-3.5" />
                     </button>
@@ -451,20 +456,20 @@ export function QuestionsTab({ kitId, questions, requirements, version, onUpdate
 
                 {/* Expanded Section: Answer Outline & Requirements */}
                 {isExpanded && (
-                  <div className="px-4 pb-4 pt-2 border-t border-slate-800/60 bg-slate-900/40 text-xs">
-                    <div className="flex items-center justify-between pb-1.5 mb-2 border-b border-slate-800/40">
-                      <span className="font-mono text-[11px] text-slate-400 uppercase tracking-wider">
+                  <div className="px-4 pb-4 pt-2 border-t border-gray-100 bg-gray-50/60 text-xs">
+                    <div className="flex items-center justify-between pb-1.5 mb-2 border-b border-gray-200/60">
+                      <span className="font-mono text-[11px] text-gray-600 uppercase tracking-wider font-semibold">
                         Suggested Answer Outline &amp; Talking Points
                       </span>
                       <button
                         type="button"
                         onClick={() => handleCopyOutline(q.id, q.answer_outline)}
-                        className="inline-flex items-center gap-1 text-[11px] text-slate-400 hover:text-slate-200 transition-colors"
+                        className="inline-flex items-center gap-1 text-[11px] text-gray-500 hover:text-gray-900 transition-colors font-medium"
                       >
                         {copiedId === q.id ? (
                           <>
-                            <CheckCheck className="w-3 h-3 text-emerald-400" />
-                            <span className="text-emerald-400">Copied</span>
+                            <CheckCheck className="w-3 h-3 text-emerald-600" />
+                            <span className="text-emerald-700">Copied</span>
                           </>
                         ) : (
                           <>
@@ -475,21 +480,21 @@ export function QuestionsTab({ kitId, questions, requirements, version, onUpdate
                       </button>
                     </div>
 
-                    <p className="text-xs text-slate-300 leading-relaxed whitespace-pre-line font-sans mb-3">
+                    <p className="text-xs text-gray-700 leading-relaxed whitespace-pre-line font-sans mb-3">
                       {q.answer_outline}
                     </p>
 
                     {/* Linked Competencies */}
                     {q.requirement_ids && q.requirement_ids.length > 0 && (
-                      <div className="pt-2 border-t border-slate-800/40 flex items-center gap-2 flex-wrap">
-                        <span className="text-[11px] text-slate-500">Evaluates Competencies:</span>
+                      <div className="pt-2 border-t border-gray-200/60 flex items-center gap-2 flex-wrap">
+                        <span className="text-[11px] text-gray-500">Evaluates Competencies:</span>
                         {q.requirement_ids.map((reqId) => {
                           const req = reqMap.get(reqId);
                           return (
                             <span
                               key={reqId}
                               title={req?.text}
-                              className="font-mono text-[10px] px-1.5 py-0.5 rounded bg-slate-800 border border-slate-700 text-slate-300"
+                              className="font-mono text-[10px] px-1.5 py-0.5 rounded bg-white border border-gray-200 text-gray-700"
                             >
                               {reqId}: {req?.text.slice(0, 30)}...
                             </span>
@@ -515,14 +520,14 @@ export function QuestionsTab({ kitId, questions, requirements, version, onUpdate
           <>
             <button
               onClick={() => setEditingQuestion(null)}
-              className="px-3 py-1.5 text-xs text-slate-400 hover:text-white rounded transition-colors"
+              className="px-3 py-1.5 text-xs text-gray-600 hover:text-gray-900 rounded transition-colors font-medium"
             >
               Cancel
             </button>
             <button
               onClick={handleSaveEdit}
               disabled={saving}
-              className="px-4 py-1.5 bg-blue-600 hover:bg-blue-500 text-white text-xs font-medium rounded transition-colors disabled:opacity-50 inline-flex items-center gap-1.5"
+              className="px-4 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-medium rounded transition-colors shadow-xs disabled:opacity-50 inline-flex items-center gap-1.5"
             >
               {saving && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
               <span>Save Changes</span>
@@ -532,34 +537,34 @@ export function QuestionsTab({ kitId, questions, requirements, version, onUpdate
       >
         <div className="space-y-4 text-xs">
           <div>
-            <label className="block font-medium text-slate-300 mb-1">Question Prompt</label>
+            <label className="block font-medium text-gray-700 mb-1">Question Prompt</label>
             <textarea
               rows={3}
               value={editForm.prompt}
               onChange={(e) => setEditForm((f) => ({ ...f, prompt: e.target.value }))}
-              className="w-full p-2.5 bg-slate-950 border border-slate-800 rounded text-xs text-white focus:outline-none focus:border-blue-500 font-sans"
+              className="w-full p-2.5 bg-white border border-gray-300 rounded text-xs text-gray-900 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 font-sans"
             />
           </div>
 
           <div>
-            <label className="block font-medium text-slate-300 mb-1">Answer Outline &amp; Guidance</label>
+            <label className="block font-medium text-gray-700 mb-1">Answer Outline &amp; Guidance</label>
             <textarea
               rows={4}
               value={editForm.answer_outline}
               onChange={(e) => setEditForm((f) => ({ ...f, answer_outline: e.target.value }))}
-              className="w-full p-2.5 bg-slate-950 border border-slate-800 rounded text-xs text-white focus:outline-none focus:border-blue-500 font-sans leading-relaxed"
+              className="w-full p-2.5 bg-white border border-gray-300 rounded text-xs text-gray-900 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 font-sans leading-relaxed"
             />
           </div>
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block font-medium text-slate-300 mb-1">Category</label>
+              <label className="block font-medium text-gray-700 mb-1">Category</label>
               <select
                 value={editForm.category}
                 onChange={(e) =>
                   setEditForm((f) => ({ ...f, category: e.target.value as Question['category'] }))
                 }
-                className="w-full p-2 bg-slate-950 border border-slate-800 rounded text-xs text-white focus:outline-none focus:border-blue-500"
+                className="w-full p-2 bg-white border border-gray-300 rounded text-xs text-gray-900 focus:outline-none focus:border-blue-500"
               >
                 <option value="technical">Technical</option>
                 <option value="behavioural">Behavioural</option>
@@ -569,7 +574,7 @@ export function QuestionsTab({ kitId, questions, requirements, version, onUpdate
             </div>
 
             <div>
-              <label className="block font-medium text-slate-300 mb-1">Difficulty</label>
+              <label className="block font-medium text-gray-700 mb-1">Difficulty</label>
               <select
                 value={editForm.difficulty}
                 onChange={(e) =>
@@ -578,7 +583,7 @@ export function QuestionsTab({ kitId, questions, requirements, version, onUpdate
                     difficulty: parseInt(e.target.value) as 1 | 2 | 3,
                   }))
                 }
-                className="w-full p-2 bg-slate-950 border border-slate-800 rounded text-xs text-white focus:outline-none focus:border-blue-500"
+                className="w-full p-2 bg-white border border-gray-300 rounded text-xs text-gray-900 focus:outline-none focus:border-blue-500"
               >
                 <option value={1}>1 - Easy</option>
                 <option value={2}>2 - Medium</option>
@@ -599,14 +604,14 @@ export function QuestionsTab({ kitId, questions, requirements, version, onUpdate
           <>
             <button
               onClick={() => setDeletingQuestion(null)}
-              className="px-3 py-1.5 text-xs text-slate-400 hover:text-white rounded transition-colors"
+              className="px-3 py-1.5 text-xs text-gray-600 hover:text-gray-900 rounded transition-colors font-medium"
             >
               Cancel
             </button>
             <button
               onClick={handleConfirmDelete}
               disabled={deleting}
-              className="px-4 py-1.5 bg-red-600 hover:bg-red-500 text-white text-xs font-medium rounded transition-colors disabled:opacity-50 inline-flex items-center gap-1.5"
+              className="px-4 py-1.5 bg-red-600 hover:bg-red-700 text-white text-xs font-medium rounded transition-colors shadow-xs disabled:opacity-50 inline-flex items-center gap-1.5"
             >
               {deleting && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
               <span>Confirm Delete</span>
@@ -614,10 +619,10 @@ export function QuestionsTab({ kitId, questions, requirements, version, onUpdate
           </>
         }
       >
-        <p className="text-xs text-slate-300">
-          Question: <span className="font-semibold text-white">"{deletingQuestion?.prompt}"</span>
+        <p className="text-xs text-gray-700">
+          Question: <span className="font-semibold text-gray-900">"{deletingQuestion?.prompt}"</span>
         </p>
-        <p className="text-[11px] text-slate-500 mt-2">
+        <p className="text-[11px] text-gray-500 mt-2">
           This question will be removed from all upcoming study schedule days.
         </p>
       </Modal>
@@ -632,14 +637,14 @@ export function QuestionsTab({ kitId, questions, requirements, version, onUpdate
           <>
             <button
               onClick={() => setRegenCategory(null)}
-              className="px-3 py-1.5 text-xs text-slate-400 hover:text-white rounded transition-colors"
+              className="px-3 py-1.5 text-xs text-gray-600 hover:text-gray-900 rounded transition-colors font-medium"
             >
               Cancel
             </button>
             <button
               onClick={handleConfirmRegenerate}
               disabled={regenerating}
-              className="px-4 py-1.5 bg-blue-600 hover:bg-blue-500 text-white text-xs font-medium rounded transition-colors disabled:opacity-50 inline-flex items-center gap-1.5"
+              className="px-4 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-medium rounded transition-colors shadow-xs disabled:opacity-50 inline-flex items-center gap-1.5"
             >
               {regenerating && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
               <span>Confirm Regeneration</span>
@@ -647,13 +652,13 @@ export function QuestionsTab({ kitId, questions, requirements, version, onUpdate
           </>
         }
       >
-        <div className="text-xs text-slate-300 space-y-3">
+        <div className="text-xs text-gray-700 space-y-3">
           <p>
-            This operation will generate fresh questions for the <span className="font-semibold text-white">{regenCategory}</span> category ({currentCategoryCount} current items).
+            This operation will generate fresh questions for the <span className="font-semibold text-gray-900">{regenCategory}</span> category ({currentCategoryCount} current items).
           </p>
 
-          <div className="p-3 rounded bg-blue-500/10 border border-blue-500/20 text-blue-300 text-xs">
-            <span className="font-semibold text-blue-200">Preservation Guarantee: </span>
+          <div className="p-3 rounded bg-blue-50 border border-blue-200 text-blue-800 text-xs">
+            <span className="font-semibold text-blue-900">Preservation Guarantee: </span>
             Any questions you have manually edited or pinned will remain completely preserved. Unrelated categories will not be modified.
           </div>
         </div>
@@ -669,14 +674,14 @@ export function QuestionsTab({ kitId, questions, requirements, version, onUpdate
           <>
             <button
               onClick={() => setIsAddingQuestion(false)}
-              className="px-3 py-1.5 text-xs text-slate-400 hover:text-white rounded transition-colors"
+              className="px-3 py-1.5 text-xs text-gray-600 hover:text-gray-900 rounded transition-colors font-medium"
             >
               Cancel
             </button>
             <button
               onClick={handleAddQuestion}
               disabled={saving || !newQuestionForm.prompt.trim()}
-              className="px-4 py-1.5 bg-blue-600 hover:bg-blue-500 text-white text-xs font-medium rounded transition-colors disabled:opacity-50 inline-flex items-center gap-1.5"
+              className="px-4 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-medium rounded transition-colors shadow-xs disabled:opacity-50 inline-flex items-center gap-1.5"
             >
               {saving && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
               <span>Add to Question Bank</span>
@@ -686,8 +691,8 @@ export function QuestionsTab({ kitId, questions, requirements, version, onUpdate
       >
         <form onSubmit={handleAddQuestion} className="space-y-4 text-xs">
           <div>
-            <label className="block font-medium text-slate-300 mb-1">
-              Question Prompt <span className="text-red-400">*</span>
+            <label className="block font-medium text-gray-700 mb-1">
+              Question Prompt <span className="text-red-500">*</span>
             </label>
             <input
               type="text"
@@ -695,12 +700,12 @@ export function QuestionsTab({ kitId, questions, requirements, version, onUpdate
               placeholder="e.g. How does React Reconciliation algorithm differ in Concurrent Mode?"
               value={newQuestionForm.prompt}
               onChange={(e) => setNewQuestionForm((f) => ({ ...f, prompt: e.target.value }))}
-              className="w-full p-2.5 bg-slate-950 border border-slate-800 rounded text-xs text-white focus:outline-none focus:border-blue-500"
+              className="w-full p-2.5 bg-white border border-gray-300 rounded text-xs text-gray-900 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
             />
           </div>
 
           <div>
-            <label className="block font-medium text-slate-300 mb-1">
+            <label className="block font-medium text-gray-700 mb-1">
               Answer Outline &amp; Expected Talking Points
             </label>
             <textarea
@@ -708,13 +713,13 @@ export function QuestionsTab({ kitId, questions, requirements, version, onUpdate
               placeholder="Key concepts, algorithms, architectural trade-offs to cover..."
               value={newQuestionForm.answer_outline}
               onChange={(e) => setNewQuestionForm((f) => ({ ...f, answer_outline: e.target.value }))}
-              className="w-full p-2.5 bg-slate-950 border border-slate-800 rounded text-xs text-white focus:outline-none focus:border-blue-500 font-sans"
+              className="w-full p-2.5 bg-white border border-gray-300 rounded text-xs text-gray-900 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 font-sans"
             />
           </div>
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block font-medium text-slate-300 mb-1">Category</label>
+              <label className="block font-medium text-gray-700 mb-1">Category</label>
               <select
                 value={newQuestionForm.category}
                 onChange={(e) =>
@@ -723,7 +728,7 @@ export function QuestionsTab({ kitId, questions, requirements, version, onUpdate
                     category: e.target.value as Question['category'],
                   }))
                 }
-                className="w-full p-2 bg-slate-950 border border-slate-800 rounded text-xs text-white focus:outline-none focus:border-blue-500"
+                className="w-full p-2 bg-white border border-gray-300 rounded text-xs text-gray-900 focus:outline-none focus:border-blue-500"
               >
                 <option value="technical">Technical</option>
                 <option value="behavioural">Behavioural</option>
@@ -733,7 +738,7 @@ export function QuestionsTab({ kitId, questions, requirements, version, onUpdate
             </div>
 
             <div>
-              <label className="block font-medium text-slate-300 mb-1">Difficulty</label>
+              <label className="block font-medium text-gray-700 mb-1">Difficulty</label>
               <select
                 value={newQuestionForm.difficulty}
                 onChange={(e) =>
@@ -742,7 +747,7 @@ export function QuestionsTab({ kitId, questions, requirements, version, onUpdate
                     difficulty: parseInt(e.target.value) as 1 | 2 | 3,
                   }))
                 }
-                className="w-full p-2 bg-slate-950 border border-slate-800 rounded text-xs text-white focus:outline-none focus:border-blue-500"
+                className="w-full p-2 bg-white border border-gray-300 rounded text-xs text-gray-900 focus:outline-none focus:border-blue-500"
               >
                 <option value={1}>1 - Easy</option>
                 <option value={2}>2 - Medium</option>
