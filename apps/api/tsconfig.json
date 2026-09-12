@@ -1,0 +1,14 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "CommonJS",
+    "moduleResolution": "node",
+    "outDir": "./dist",
+    "paths": {
+      "@interview-prep/shared": ["../../packages/shared/src/index.ts"]
+    }
+  },
+  "include": ["src", "../../tests"],
+  "exclude": ["node_modules", "dist"]
+}

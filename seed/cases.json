@@ -1,0 +1,20 @@
+[
+  {
+    "id": "case-01",
+    "jd": "Senior Full Stack Engineer\n\nWe are building a world-class payments platform.\n\nRequired:\n- 5+ years React and TypeScript\n- Node.js and Express experience\n- MongoDB or PostgreSQL\n- REST API design\n- AWS services experience\n\nPreferred:\n- Next.js experience\n- Docker and Kubernetes\n- Mentoring experience\n\nResponsibilities:\n- Own features end-to-end\n- Technical leadership\n- Code review",
+    "company_url": "https://stripe.com",
+    "days": 5
+  },
+  {
+    "id": "case-02",
+    "jd": "Backend Engineer\n\nJoin our infrastructure team.\n\nMust have:\n- Go or Python backend experience\n- PostgreSQL and Redis\n- REST API design\n- Docker\n\nNice to have:\n- Kafka experience\n- Distributed systems",
+    "company_url": "https://github.com",
+    "days": 7
+  },
+  {
+    "id": "case-03",
+    "jd": "React Frontend Engineer\n\nBuild beautiful user interfaces.\n\nRequirements:\n- 4+ years React\n- TypeScript\n- CSS and responsive design\n- Performance optimization",
+    "company_url": "https://vercel.com",
+    "days": 3
+  }
+]
