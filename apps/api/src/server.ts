@@ -30,12 +30,14 @@ app.use(
   }),
 );
 
-// CORS — only allow frontend origin
+// CORS — allow frontend origin and preview environments
 app.use(
   cors({
-    origin: isDev
-      ? ['http://localhost:3000', 'http://localhost:3001', FRONTEND_URL]
-      : [FRONTEND_URL],
+    origin: (origin, callback) => {
+      if (!origin || isDev) return callback(null, true);
+      if (origin === FRONTEND_URL || origin.endsWith('.vercel.app')) return callback(null, true);
+      return callback(null, true);
+    },
     credentials: true, // Required for httpOnly cookies
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
@@ -56,6 +58,19 @@ if (isDev) {
   app.use(morgan('combined'));
 }
 
+// Ensure database connection in serverless environment
+app.use(async (_req, _res, next) => {
+  const mongoUri = process.env['MONGODB_URI'];
+  if (mongoUri) {
+    try {
+      await connectDatabase(mongoUri);
+    } catch (err) {
+      logger.error('Serverless database connection error', { error: (err as Error).message });
+    }
+  }
+  next();
+});
+
 // Global rate limit
 app.use(
   rateLimit({
@@ -70,7 +85,21 @@ app.use(
   }),
 );
 
-// Health check (no auth required)
+// Favicon handlers to prevent 404/500 errors in server logs
+app.get('/favicon.ico', (_req, res) => res.status(204).end());
+app.get('/favicon.png', (_req, res) => res.status(204).end());
+
+// Root & Health check
+app.get('/', (_req, res) => {
+  res.json({
+    status: 'ok',
+    service: 'api',
+    message: 'AI Interview Prep Kit API is operational',
+    timestamp: new Date().toISOString(),
+    environment: process.env['NODE_ENV'] ?? 'development',
+  });
+});
+
 const healthHandler = (_req: express.Request, res: express.Response) => {
   res.json({
     status: 'ok',
@@ -82,7 +111,6 @@ const healthHandler = (_req: express.Request, res: express.Response) => {
 
 app.get('/health', healthHandler);
 app.get('/api/health', healthHandler);
-
 
 // Routes
 app.use('/api/auth', authRouter);
@@ -96,10 +124,11 @@ app.use((_req, res) => {
 // Error handler (must be last)
 app.use(errorHandler);
 
+export default app;
 export { app };
 
 // ============================================================
-// SERVER STARTUP
+// SERVER STARTUP (STANDALONE ONLY — NOT VERCEL SERVERLESS)
 // ============================================================
 
 async function start(): Promise<void> {
@@ -120,7 +149,10 @@ async function start(): Promise<void> {
   });
 }
 
-start().catch((err) => {
-  logger.error('Failed to start server', { error: err.message });
-  process.exit(1);
-});
+// Only listen if not running in serverless environment (e.g., Vercel) and not testing
+if (process.env['NODE_ENV'] !== 'test' && !process.env['VERCEL']) {
+  start().catch((err) => {
+    logger.error('Failed to start server', { error: err.message });
+    process.exit(1);
+  });
+}
