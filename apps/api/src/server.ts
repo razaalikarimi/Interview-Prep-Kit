@@ -58,19 +58,6 @@ if (isDev) {
   app.use(morgan('combined'));
 }
 
-// Ensure database connection in serverless environment
-app.use(async (_req, _res, next) => {
-  const mongoUri = process.env['MONGODB_URI'];
-  if (mongoUri) {
-    try {
-      await connectDatabase(mongoUri);
-    } catch (err) {
-      logger.error('Serverless database connection error', { error: (err as Error).message });
-    }
-  }
-  next();
-});
-
 // Global rate limit
 app.use(
   rateLimit({
@@ -93,28 +80,43 @@ app.get('/favicon.png', (_req, res) => {
   res.status(204).end();
 });
 
-// Root & Health check
-app.get('/', (_req, res) => {
+// Root & Health checks (instant response, no DB wait needed)
+const rootHandler = (_req: express.Request, res: express.Response) => {
   res.json({
     status: 'ok',
     service: 'api',
     message: 'AI Interview Prep Kit API is operational',
     timestamp: new Date().toISOString(),
-    environment: process.env['NODE_ENV'] ?? 'development',
+    environment: process.env['NODE_ENV'] ?? 'production',
   });
-});
+};
 
 const healthHandler = (_req: express.Request, res: express.Response) => {
   res.json({
     status: 'ok',
     service: 'api',
     timestamp: new Date().toISOString(),
-    environment: process.env['NODE_ENV'] ?? 'development',
+    environment: process.env['NODE_ENV'] ?? 'production',
   });
 };
 
+app.get('/', rootHandler);
+app.get('/api', rootHandler);
 app.get('/health', healthHandler);
 app.get('/api/health', healthHandler);
+
+// Ensure database connection for authenticated and kit routes
+app.use(async (_req, _res, next) => {
+  const mongoUri = process.env['MONGODB_URI'];
+  if (mongoUri) {
+    try {
+      await connectDatabase(mongoUri);
+    } catch (err) {
+      logger.error('Serverless database connection error', { error: (err as Error).message });
+    }
+  }
+  next();
+});
 
 // Routes
 app.use('/api/auth', authRouter);
@@ -132,7 +134,7 @@ export default app;
 export { app };
 
 // ============================================================
-// SERVER STARTUP (STANDALONE ONLY — NOT VERCEL SERVERLESS)
+// SERVER STARTUP (STANDALONE ONLY — NEVER IN SERVERLESS)
 // ============================================================
 
 async function start(): Promise<void> {
@@ -153,8 +155,16 @@ async function start(): Promise<void> {
   });
 }
 
-// Only listen if not running in serverless environment (e.g., Vercel) and not testing
-if (process.env['NODE_ENV'] !== 'test' && !process.env['VERCEL']) {
+const isServerless = Boolean(
+  process.env['VERCEL'] ||
+  process.env['VERCEL_ENV'] ||
+  process.env['NOW_REGION'] ||
+  process.env['AWS_LAMBDA_FUNCTION_NAME'] ||
+  process.env['LAMBDA_TASK_ROOT']
+);
+
+// Only listen if executed directly via node dist/server.js and not in serverless/test
+if (require.main === module && !isServerless && process.env['NODE_ENV'] !== 'test') {
   start().catch((err) => {
     logger.error('Failed to start server', { error: err.message });
     process.exit(1);

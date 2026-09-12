@@ -7871,17 +7871,6 @@ if (isDev4) {
 } else {
   app.use((0, import_morgan.default)("combined"));
 }
-app.use(async (_req, _res, next) => {
-  const mongoUri = process.env["MONGODB_URI"];
-  if (mongoUri) {
-    try {
-      await connectDatabase(mongoUri);
-    } catch (err) {
-      logger.error("Serverless database connection error", { error: err.message });
-    }
-  }
-  next();
-});
 app.use(
   (0, import_express_rate_limit3.default)({
     windowMs: 15 * 60 * 1e3,
@@ -7900,25 +7889,38 @@ app.get("/favicon.ico", (_req, res) => {
 app.get("/favicon.png", (_req, res) => {
   res.status(204).end();
 });
-app.get("/", (_req, res) => {
+var rootHandler = (_req, res) => {
   res.json({
     status: "ok",
     service: "api",
     message: "AI Interview Prep Kit API is operational",
     timestamp: (/* @__PURE__ */ new Date()).toISOString(),
-    environment: process.env["NODE_ENV"] ?? "development"
+    environment: process.env["NODE_ENV"] ?? "production"
   });
-});
+};
 var healthHandler = (_req, res) => {
   res.json({
     status: "ok",
     service: "api",
     timestamp: (/* @__PURE__ */ new Date()).toISOString(),
-    environment: process.env["NODE_ENV"] ?? "development"
+    environment: process.env["NODE_ENV"] ?? "production"
   });
 };
+app.get("/", rootHandler);
+app.get("/api", rootHandler);
 app.get("/health", healthHandler);
 app.get("/api/health", healthHandler);
+app.use(async (_req, _res, next) => {
+  const mongoUri = process.env["MONGODB_URI"];
+  if (mongoUri) {
+    try {
+      await connectDatabase(mongoUri);
+    } catch (err) {
+      logger.error("Serverless database connection error", { error: err.message });
+    }
+  }
+  next();
+});
 app.use("/api/auth", authRouter);
 app.use("/api/kits", kitRouter);
 app.use((_req, res) => {
@@ -7941,7 +7943,10 @@ async function start() {
     });
   });
 }
-if (process.env["NODE_ENV"] !== "test" && !process.env["VERCEL"]) {
+var isServerless = Boolean(
+  process.env["VERCEL"] || process.env["VERCEL_ENV"] || process.env["NOW_REGION"] || process.env["AWS_LAMBDA_FUNCTION_NAME"] || process.env["LAMBDA_TASK_ROOT"]
+);
+if (require.main === module && !isServerless && process.env["NODE_ENV"] !== "test") {
   start().catch((err) => {
     logger.error("Failed to start server", { error: err.message });
     process.exit(1);
