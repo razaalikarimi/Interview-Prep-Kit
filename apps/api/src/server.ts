@@ -127,6 +127,12 @@ app.use(errorHandler);
 export default app;
 export { app };
 
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = app;
+  (module.exports as Record<string, unknown>)['default'] = app;
+  (module.exports as Record<string, unknown>)['app'] = app;
+}
+
 // ============================================================
 // SERVER STARTUP (STANDALONE ONLY — NOT VERCEL SERVERLESS)
 // ============================================================
