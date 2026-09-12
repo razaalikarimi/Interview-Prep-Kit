@@ -27,7 +27,6 @@
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.7.0",
     "morgan": "^1.10.0",
-    "node-fetch": "^3.3.2",
     "robots-parser": "^3.0.1",
     "uuid": "^10.0.0",
     "winston": "^3.15.0",

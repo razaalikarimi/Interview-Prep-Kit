@@ -1,4 +1,3 @@
-import fetch, { type Response } from 'node-fetch';
 import { validateSSRF, validateRedirect, SSRFError } from './ssrf.js';
 import { ErrorCodes } from '@interview-prep/shared';
 import { logger } from '../../utils/logger.js';
