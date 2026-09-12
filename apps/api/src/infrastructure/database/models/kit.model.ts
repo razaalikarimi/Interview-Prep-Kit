@@ -1,4 +1,4 @@
-import { Schema, model, Document, Types } from 'mongoose';
+import mongoose, { Schema, model, Document, Types, Model } from 'mongoose';
 import type {
   Kit,
   GenerationProgress,
@@ -163,4 +163,5 @@ const kitSchema = new Schema<IKit>(
 kitSchema.index({ userId: 1, fingerprint: 1 });
 kitSchema.index({ userId: 1, createdAt: -1 });
 
-export const KitModel = model<IKit>('Kit', kitSchema);
+export const KitModel: Model<IKit> =
+  (mongoose.models['Kit'] as Model<IKit>) || model<IKit>('Kit', kitSchema);

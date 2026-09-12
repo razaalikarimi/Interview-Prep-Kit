@@ -1,4 +1,4 @@
-import { Schema, model, Document, Types } from 'mongoose';
+import mongoose, { Schema, model, Document, Types, Model } from 'mongoose';
 
 // ============================================================
 // USER MODEL
@@ -34,9 +34,9 @@ const userSchema = new Schema<IUser>(
         delete ret['passwordHash'];
         return ret;
       },
-
     },
   },
 );
 
-export const User = model<IUser>('User', userSchema);
+export const User: Model<IUser> =
+  (mongoose.models['User'] as Model<IUser>) || model<IUser>('User', userSchema);

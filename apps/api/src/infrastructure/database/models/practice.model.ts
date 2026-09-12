@@ -1,4 +1,4 @@
-import { Schema, model, Document, Types } from 'mongoose';
+import mongoose, { Schema, model, Document, Types, Model } from 'mongoose';
 
 // ============================================================
 // PRACTICE PROGRESS MODEL
@@ -41,7 +41,6 @@ const practiceProgressSchema = new Schema<IPracticeProgress>(
 
 practiceProgressSchema.index({ userId: 1, kitId: 1 }, { unique: true });
 
-export const PracticeProgress = model<IPracticeProgress>(
-  'PracticeProgress',
-  practiceProgressSchema,
-);
+export const PracticeProgress: Model<IPracticeProgress> =
+  (mongoose.models['PracticeProgress'] as Model<IPracticeProgress>) ||
+  model<IPracticeProgress>('PracticeProgress', practiceProgressSchema);
