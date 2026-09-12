@@ -8,11 +8,11 @@ import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import morgan from 'morgan';
 import rateLimit from 'express-rate-limit';
-import { authRouter } from './controllers/auth.controller.js';
-import { kitRouter } from './controllers/kit.controller.js';
-import { errorHandler } from './middleware/error.middleware.js';
-import { connectDatabase } from './infrastructure/database/connection.js';
-import { logger } from './utils/logger.js';
+import { authRouter } from './controllers/auth.controller';
+import { kitRouter } from './controllers/kit.controller';
+import { errorHandler } from './middleware/error.middleware';
+import { connectDatabase } from './infrastructure/database/connection';
+import { logger } from './utils/logger';
 
 // ============================================================
 // EXPRESS APPLICATION SETUP
@@ -86,8 +86,12 @@ app.use(
 );
 
 // Favicon handlers to prevent 404/500 errors in server logs
-app.get('/favicon.ico', (_req, res) => res.status(204).end());
-app.get('/favicon.png', (_req, res) => res.status(204).end());
+app.get('/favicon.ico', (_req, res) => {
+  res.status(204).end();
+});
+app.get('/favicon.png', (_req, res) => {
+  res.status(204).end();
+});
 
 // Root & Health check
 app.get('/', (_req, res) => {

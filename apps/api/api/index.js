@@ -7894,8 +7894,12 @@ app.use(
     }
   })
 );
-app.get("/favicon.ico", (_req, res) => res.status(204).end());
-app.get("/favicon.png", (_req, res) => res.status(204).end());
+app.get("/favicon.ico", (_req, res) => {
+  res.status(204).end();
+});
+app.get("/favicon.png", (_req, res) => {
+  res.status(204).end();
+});
 app.get("/", (_req, res) => {
   res.json({
     status: "ok",
