@@ -27,10 +27,6 @@ export default function LoginPage() {
     }
   };
 
-  const handleDemoFill = () => {
-    setForm({ email: 'evaluator@enterprise.com', password: 'Password123!' });
-  };
-
   return (
     <div className="min-h-screen flex flex-col justify-center items-center bg-[#F8F9FB] px-4 text-gray-900">
       <div className="w-full max-w-sm">
@@ -120,16 +116,6 @@ export default function LoginPage() {
             </button>
           </form>
 
-          {/* Quick Fill Credentials for Reviewer */}
-          <div className="mt-4 pt-4 border-t border-gray-100">
-            <button
-              type="button"
-              onClick={handleDemoFill}
-              className="w-full py-1.5 px-3 bg-gray-50 hover:bg-gray-100 border border-gray-200 rounded text-[11px] font-mono text-gray-700 transition-colors"
-            >
-              Autofill Evaluation Credentials
-            </button>
-          </div>
         </div>
 
         {/* Footer Link */}
