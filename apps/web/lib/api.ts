@@ -15,17 +15,42 @@ export class ApiError extends Error {
   }
 }
 
+function getStoredToken(): string | null {
+  if (typeof window === 'undefined') return null;
+  try {
+    return localStorage.getItem('auth_token');
+  } catch {
+    return null;
+  }
+}
+
+function setStoredToken(token?: string): void {
+  if (typeof window === 'undefined') return;
+  try {
+    if (token) {
+      localStorage.setItem('auth_token', token);
+    } else {
+      localStorage.removeItem('auth_token');
+    }
+  } catch {
+    // Ignore storage errors
+  }
+}
+
 async function request<T>(
   path: string,
   options: RequestInit = {},
 ): Promise<T> {
   const url = `${API_BASE}${path}`;
+  const token = getStoredToken();
+  const authHeaders: Record<string, string> = token ? { Authorization: `Bearer ${token}` } : {};
 
   const response = await fetch(url, {
     ...options,
     credentials: 'include', // Send httpOnly cookies
     headers: {
       'Content-Type': 'application/json',
+      ...authHeaders,
       ...options.headers,
     },
   });
@@ -55,20 +80,31 @@ export interface User {
 }
 
 export const authApi = {
-  register: (data: { email: string; password: string; name: string }) =>
-    request<{ userId: string; message: string }>('/api/auth/register', {
+  register: async (data: { email: string; password: string; name: string }) => {
+    const res = await request<{ userId: string; token?: string; message: string }>('/api/auth/register', {
       method: 'POST',
       body: JSON.stringify(data),
-    }),
+    });
+    if (res.token) setStoredToken(res.token);
+    return res;
+  },
 
-  login: (data: { email: string; password: string }) =>
-    request<{ userId: string; name: string; message: string }>('/api/auth/login', {
+  login: async (data: { email: string; password: string }) => {
+    const res = await request<{ userId: string; name: string; token?: string; message: string }>('/api/auth/login', {
       method: 'POST',
       body: JSON.stringify(data),
-    }),
+    });
+    if (res.token) setStoredToken(res.token);
+    return res;
+  },
 
-  logout: () =>
-    request<{ message: string }>('/api/auth/logout', { method: 'POST' }),
+  logout: async () => {
+    try {
+      return await request<{ message: string }>('/api/auth/logout', { method: 'POST' });
+    } finally {
+      setStoredToken(undefined);
+    }
+  },
 
   me: () => request<User>('/api/auth/me'),
 };

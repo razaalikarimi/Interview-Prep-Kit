@@ -25,7 +25,7 @@ function setCookieToken(res: Response, token: string): void {
   res.cookie('auth_token', token, {
     httpOnly: true,
     secure: !isDev,
-    sameSite: isDev ? 'lax' : 'strict',
+    sameSite: isDev ? 'lax' : 'none',
     maxAge: 24 * 60 * 60 * 1000, // 24 hours
     path: '/',
   });
@@ -40,7 +40,7 @@ authRouter.post('/register', authRateLimit, async (req: Request, res: Response, 
       validated.name,
     );
     setCookieToken(res, token);
-    res.status(201).json({ success: true, data: { userId, message: 'Registration successful' } });
+    res.status(201).json({ success: true, data: { userId, token, message: 'Registration successful' } });
   } catch (err) {
     next(err);
   }
@@ -51,7 +51,7 @@ authRouter.post('/login', authRateLimit, async (req: Request, res: Response, nex
     const validated = LoginRequestSchema.parse(req.body);
     const { userId, token, name } = await loginUser(validated.email, validated.password);
     setCookieToken(res, token);
-    res.json({ success: true, data: { userId, name, message: 'Login successful' } });
+    res.json({ success: true, data: { userId, name, token, message: 'Login successful' } });
   } catch (err) {
     next(err);
   }

@@ -20,7 +20,9 @@ declare global {
 }
 
 export function requireAuth(req: Request, res: Response, next: NextFunction): void {
-  const token = req.cookies?.['auth_token'] as string | undefined;
+  const authHeader = req.headers.authorization;
+  const bearerToken = authHeader?.startsWith('Bearer ') ? authHeader.slice(7).trim() : undefined;
+  const token = (req.cookies?.['auth_token'] as string | undefined) || bearerToken;
 
   if (!token) {
     res.status(401).json({

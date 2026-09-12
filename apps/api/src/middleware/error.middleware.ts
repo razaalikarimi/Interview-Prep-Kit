@@ -67,7 +67,7 @@ export function errorHandler(
         stack: err.stack,
       });
     } else {
-      logger.error('Request error', { code, path: req.path });
+      logger.error('Request error', { code, message: err.message, stack: err.stack, path: req.path });
     }
   }
 
