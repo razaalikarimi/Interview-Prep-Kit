@@ -11,8 +11,10 @@ node_modules/
 .env.production.local
 
 # Build outputs
-dist/
+apps/web/dist/
 build/
+!packages/shared/dist/
+!apps/api/dist/
 .next/
 out/
 
