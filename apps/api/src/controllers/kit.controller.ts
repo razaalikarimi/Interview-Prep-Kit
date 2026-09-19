@@ -730,7 +730,7 @@ kitRouter.get('/:id/progress-report', requireAuth, async (req: Request, res: Res
 // GET /api/kits/:id/flashcards-ordered
 kitRouter.get('/:id/flashcards-ordered', requireAuth, async (req: Request, res: Response, next) => {
   try {
-    const kitDoc = await KitModel.findById(req.params['id']);
+    const kitDoc = await KitModel.findById(req.params['id']).lean();
     if (!kitDoc) {
       res.status(404).json({ success: false, error: { code: ErrorCodes.KIT_NOT_FOUND, message: 'Kit not found' } });
       return;
@@ -742,28 +742,28 @@ kitRouter.get('/:id/flashcards-ordered', requireAuth, async (req: Request, res: 
       return;
     }
 
-
     const practiceDoc = await PracticeProgress.findOne({
       userId: req.user!.userId,
       kitId: kitDoc._id,
-    });
+    }).lean();
 
     const records = practiceDoc?.records ?? [];
     const flashcards = kitDoc.kit.flashcards ?? [];
     const requirements = kitDoc.kit.role.requirements ?? [];
 
     const orderedFlashcards = flashcards
-      .map((f) => {
+      .map((f: any) => {
         const cardRecords = records.filter((r) => r.flashcardId === f.id);
         const latestRecord = cardRecords.sort(
           (a, b) => new Date(b.practicedAt).getTime() - new Date(a.practicedAt).getTime(),
         )[0];
-        const priorityScore = computeFlashcardPriority(f, requirements, records);
+        const priorityScore = computeFlashcardPriority(f, requirements, records as any);
+        const flashcardObj = typeof f.toObject === 'function' ? f.toObject() : (f._doc ? { ...f._doc, ...f } : f);
 
         return {
-          ...f,
+          ...flashcardObj,
           lastConfidence: latestRecord?.confidence,
-          lastPracticedAt: latestRecord?.practicedAt.toISOString(),
+          lastPracticedAt: latestRecord?.practicedAt ? new Date(latestRecord.practicedAt).toISOString() : undefined,
           practiceCount: cardRecords.length,
           priorityScore,
         };

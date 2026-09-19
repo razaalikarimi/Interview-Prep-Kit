@@ -214,12 +214,12 @@ export default function PracticePage({ params }: { params: Promise<{ id: string 
               <div>
                 <div className="flex items-center justify-between pb-3 mb-4 border-b border-gray-100">
                   <span className="text-[10px] font-mono uppercase tracking-wider text-gray-500 font-semibold">
-                    Card {currentIndex + 1} of {flashcards.length} · {card.id}
+                    Card {currentIndex + 1} of {flashcards.length} · {card.id || (card as any)._doc?.id || `card-${currentIndex + 1}`}
                   </span>
 
-                  {card.requirement_ids && card.requirement_ids.length > 0 && (
+                  {(card.requirement_ids || (card as any)._doc?.requirement_ids)?.length > 0 && (
                     <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-gray-100 border border-gray-200 text-gray-600">
-                      Req: {card.requirement_ids.join(', ')}
+                      Req: {(card.requirement_ids || (card as any)._doc?.requirement_ids).join(', ')}
                     </span>
                   )}
                 </div>
@@ -230,7 +230,7 @@ export default function PracticePage({ params }: { params: Promise<{ id: string 
                     Question
                   </span>
                   <h2 className="text-base sm:text-lg font-semibold text-gray-900 leading-relaxed">
-                    {card.front}
+                    {card.front || (card as any)._doc?.front || 'No question prompt available'}
                   </h2>
                 </div>
 
@@ -241,7 +241,7 @@ export default function PracticePage({ params }: { params: Promise<{ id: string 
                       Answer / Key Concept
                     </span>
                     <p className="text-xs sm:text-sm text-gray-700 leading-relaxed font-sans">
-                      {card.back}
+                      {card.back || (card as any)._doc?.back || 'No answer outline available'}
                     </p>
                   </div>
                 ) : null}
