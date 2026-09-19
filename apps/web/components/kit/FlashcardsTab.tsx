@@ -223,7 +223,10 @@ export function FlashcardsTab({ kitId, flashcards, requirements: _requirements, 
                     <div className="flex items-center gap-1">
                       <button
                         type="button"
-                        onClick={() => handlePinToggle(card)}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handlePinToggle(card);
+                        }}
                         title={isPinned ? 'Unpin' : 'Pin (preserves during regeneration)'}
                         className={`p-1 rounded transition-colors ${
                           isPinned
@@ -236,7 +239,10 @@ export function FlashcardsTab({ kitId, flashcards, requirements: _requirements, 
 
                       <button
                         type="button"
-                        onClick={() => handleStartEdit(card)}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleStartEdit(card);
+                        }}
                         title="Edit flashcard"
                         className="p-1 text-gray-400 hover:text-gray-700 hover:bg-gray-100 rounded transition-colors"
                       >
@@ -245,7 +251,10 @@ export function FlashcardsTab({ kitId, flashcards, requirements: _requirements, 
 
                       <button
                         type="button"
-                        onClick={() => setDeletingCard(card)}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setDeletingCard(card);
+                        }}
                         title="Delete flashcard"
                         className="p-1 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded transition-colors"
                       >

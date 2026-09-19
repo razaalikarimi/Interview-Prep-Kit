@@ -7947,7 +7947,7 @@ async function start() {
 var isServerless = Boolean(
   process.env["VERCEL"] || process.env["VERCEL_ENV"] || process.env["NOW_REGION"] || process.env["AWS_LAMBDA_FUNCTION_NAME"] || process.env["LAMBDA_TASK_ROOT"]
 );
-if (require.main === module && !isServerless && process.env["NODE_ENV"] !== "test") {
+if ((!require.main || require.main === module) && !isServerless && process.env["NODE_ENV"] !== "test") {
   start().catch((err) => {
     logger.error("Failed to start server", { error: err.message });
     process.exit(1);

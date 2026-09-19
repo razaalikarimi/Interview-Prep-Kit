@@ -423,7 +423,10 @@ export function QuestionsTab({ kitId, questions, requirements, version, onUpdate
                   <div className="flex items-center gap-1 flex-shrink-0 pt-0.5">
                     <button
                       type="button"
-                      onClick={() => handlePinToggle(q)}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handlePinToggle(q);
+                      }}
                       title={isPinned ? 'Unpin question' : 'Pin question (protects from regeneration)'}
                       className={`p-1.5 rounded transition-colors ${
                         isPinned
@@ -436,7 +439,10 @@ export function QuestionsTab({ kitId, questions, requirements, version, onUpdate
 
                     <button
                       type="button"
-                      onClick={() => handleStartEdit(q)}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleStartEdit(q);
+                      }}
                       title="Edit question"
                       className="p-1.5 text-gray-400 hover:text-gray-700 hover:bg-gray-100 rounded transition-colors"
                     >
@@ -445,7 +451,10 @@ export function QuestionsTab({ kitId, questions, requirements, version, onUpdate
 
                     <button
                       type="button"
-                      onClick={() => setDeletingQuestion(q)}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setDeletingQuestion(q);
+                      }}
                       title="Delete question"
                       className="p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded transition-colors"
                     >

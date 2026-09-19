@@ -163,8 +163,8 @@ const isServerless = Boolean(
   process.env['LAMBDA_TASK_ROOT']
 );
 
-// Only listen if executed directly via node dist/server.js and not in serverless/test
-if (require.main === module && !isServerless && process.env['NODE_ENV'] !== 'test') {
+// Only listen if executed directly and not in serverless/test
+if ((!require.main || require.main === module) && !isServerless && process.env['NODE_ENV'] !== 'test') {
   start().catch((err) => {
     logger.error('Failed to start server', { error: err.message });
     process.exit(1);
